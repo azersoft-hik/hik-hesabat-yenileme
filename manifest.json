@@ -1,0 +1,27 @@
+{
+ "product": "hik-hesabat",
+ "ui": 2,
+ "minMain": 1,
+ "files": [
+  {
+   "path": "index.html",
+   "size": 192391,
+   "sha256": "f77aecab12d36825c3246aec7b1c33bba9b81703e91201e5da00bd8b4b04cfba"
+  },
+  {
+   "path": "icon.png",
+   "size": 226646,
+   "sha256": "c4427d337d1dc407d650acdfbf92c5c8329f279a6ddb25dc54f573db617807c4"
+  },
+  {
+   "path": "logo.png",
+   "size": 158747,
+   "sha256": "8b9f3a2954973df752edf202379fe1ac7de9c0896123c7d3d59d1aea2ea3baf1"
+  },
+  {
+   "path": "xlsx.full.min.js",
+   "size": 881727,
+   "sha256": "c9506197caf809a075b6dee1da0d36fb19da7158ffe8a88e7b0c96c5d8623c99"
+  }
+ ]
+}

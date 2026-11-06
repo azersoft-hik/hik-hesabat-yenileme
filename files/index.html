@@ -1,0 +1,1709 @@
+<!doctype html><html data-theme="light"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Həmkarlar İttifaqı Hesabatı</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src 'self' data:">
+<style>
+/* Layout: sticky header with period switcher + tabs; report view is the official Cədvəl 1/2 form sheet; data views split into entry form and register */
+:root{
+  --bg:#EEF2F3; --surface:#FFFFFF; --surface-2:#F5F8F8; --line:#D3DCDE; --line-strong:#AFBEC1;
+  --ink:#15262B; --muted:#5A6D72; --brand:#0E5263; --brand-ink:#FFFFFF; --brand-soft:#DCEBEE;
+  --gold:#B07A16; --gold-soft:#FBF1DC; --danger:#B3372B; --danger-soft:#F8E3E0; --ok:#2C7A4B; --ok-soft:#DFF0E6;
+  --f-display:"Literata",Georgia,"Times New Roman",serif;
+  --f-body:"Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1719; --surface:#142124; --surface-2:#192A2E; --line:#27393D; --line-strong:#3B5358;
+  --ink:#E4EEF0; --muted:#93A8AD; --brand:#5FB3C6; --brand-ink:#08262E; --brand-soft:#173840;
+  --gold:#E2B256; --gold-soft:#33290F; --danger:#EE8577; --danger-soft:#3A1C18; --ok:#6CC892; --ok-soft:#173326; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1719; --surface:#142124; --surface-2:#192A2E; --line:#27393D; --line-strong:#3B5358;
+  --ink:#E4EEF0; --muted:#93A8AD; --brand:#5FB3C6; --brand-ink:#08262E; --brand-soft:#173840;
+  --gold:#E2B256; --gold-soft:#33290F; --danger:#EE8577; --danger-soft:#3A1C18; --ok:#6CC892; --ok-soft:#173326; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:14px 8px}
+.mark{width:42px;height:42px;border-radius:50%;border:2px solid var(--brand);display:grid;place-items:center;color:var(--brand);font-family:var(--f-display);font-weight:700;font-size:15px;flex:none}
+.titles{flex:1;min-width:0}
+.titles h1{font-family:var(--f-display);font-size:20px;margin:0;line-height:1.2}
+.titles .org{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.periods{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-bottom:8px}
+.periods .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:2px}
+.pchip{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);border-radius:999px;padding:3px 12px;cursor:pointer;font-variant-numeric:tabular-nums}
+.pchip:hover{border-color:var(--brand)}
+.pchip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.pnow{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.btn{font:inherit;font-weight:600;font-size:14px;border-radius:8px;padding:8px 14px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--brand);color:var(--brand)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.primary:hover{filter:brightness(1.08);color:var(--brand-ink)}
+.btn.ghost{border-color:transparent;background:none}
+.btn.danger{color:var(--danger);border-color:var(--danger)}
+.btn:focus-visible,.tab:focus-visible,.pchip:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-bottom:-1px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font:inherit;font-size:14px;font-weight:500;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:10px 12px;white-space:nowrap;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--brand);font-weight:700}
+.tab .n{font-size:11px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:0 7px;font-variant-numeric:tabular-nums;color:var(--muted)}
+main{padding-block:22px 60px}
+.notice{background:var(--gold-soft);border:1px solid var(--gold);border-radius:var(--r);padding:10px 14px;font-size:14px;margin-bottom:16px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-width:0}
+.kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-family:var(--f-display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:4px;overflow-wrap:anywhere}
+.kpi .s{font-size:13px;color:var(--muted)}
+.kpi.bal .v{color:var(--gold)}
+.bar{height:6px;border-radius:3px;background:var(--line);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 1px 0 var(--line),0 12px 30px -18px rgba(14,82,99,.35);padding:clamp(16px,4vw,44px);max-width:900px;margin:0 auto}
+.sheet-head{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin-bottom:18px}
+.sheet-head dt{color:var(--muted)}
+.sheet-head dd{margin:0;font-weight:700}
+.tno{text-align:right;font-size:12px;color:var(--muted);font-style:italic;margin:18px 0 4px}
+.sec-title{font-family:var(--f-display);font-size:16px;margin:0 0 4px;color:var(--brand)}
+.tbl-wrap{overflow-x:auto}
+table.rep{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+table.rep th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+table.rep th.l{text-align:left}
+table.rep td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;vertical-align:top}
+table.rep td.code{text-align:left;color:var(--muted);width:56px;font-size:13px}
+table.rep td.name{text-align:left;white-space:normal;min-width:220px}
+table.rep tr.lv2 td.name{padding-left:24px}
+table.rep tr.grp td{font-weight:700;background:var(--surface-2)}
+table.rep tr.head td{font-weight:700;color:var(--brand)}
+table.rep tr.tot td{font-weight:700;background:var(--gold-soft);border-bottom:1px solid var(--gold)}
+table.rep td.z{color:var(--muted)}
+table.rep td.over{color:var(--danger)}
+.foot{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-top:34px;flex-wrap:wrap}
+.foot .sig{display:flex;gap:12px;align-items:end;font-size:14px}
+.foot .ln{display:inline-block;width:160px;border-bottom:1px solid var(--ink);height:18px}
+.seal{width:84px;height:84px;border-radius:50%;border:2px dashed var(--line-strong);display:grid;place-items:center;color:var(--muted);font-family:var(--f-display);font-weight:700}
+.split{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.card h2{font-family:var(--f-display);font-size:17px;margin:0 0 4px}
+.card .hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+form.entry{display:grid;gap:12px}
+.fld{display:grid;gap:4px;min-width:0}
+.fld label{font-size:12.5px;font-weight:600;color:var(--muted)}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:15px;width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink)}
+.fld input:focus,.fld select:focus{border-color:var(--brand)}
+.fld .help{font-size:12px;color:var(--muted)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.form-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.form-msg{font-size:13px;min-height:1.2em}
+.form-msg.err{color:var(--danger)}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.reg-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.reg-tools select,.reg-tools input{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);min-width:0;flex:1 1 180px}
+.reg-tools input.srch{flex:0 1 240px;margin-left:auto}
+@media (max-width:700px){.reg-tools input.srch{flex:1 1 100%;margin-left:0}}
+.p40{font-size:12.5px;font-weight:600;color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+div.p40{margin-top:2px}
+.sum{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:8px}
+.sum b{color:var(--ink)}
+table.reg{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+table.reg th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+table.reg td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.reg .num{text-align:right;white-space:nowrap}
+table.reg tbody tr[data-id]{cursor:pointer}
+table.reg tbody tr[data-id]:hover{background:var(--surface-2)}
+table.reg tbody tr.sel{background:var(--brand-soft)}
+table.reg tr.out td{color:var(--muted)}
+.code-chip{display:inline-block;font-size:12px;font-weight:700;padding:0 7px;border-radius:4px;margin-right:6px}
+.code-chip.in{background:var(--ok-soft);color:var(--ok)}
+.code-chip.ex{background:var(--brand-soft);color:var(--brand)}
+.mut{color:var(--muted);font-size:13px}
+.mut .sst{color:var(--brand);font-weight:600}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.st.pend{background:var(--gold-soft);color:var(--gold)}.st.done{background:var(--ok-soft);color:var(--ok)}.st.rej{background:var(--danger-soft);color:var(--danger)}.st.info{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.empty{padding:32px 12px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-family:var(--f-display);font-size:16px;margin-bottom:4px}
+.plan-sheet>.hint{margin-top:0}
+.bud-head{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:6px 0 22px;font-size:13.5px}
+.bud-side{display:grid;gap:2px;align-content:start}
+.bud-t{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px dashed var(--line-strong);padding:3px 2px;width:100%;min-width:0}
+.bud-t:hover,.bud-t:focus{background:var(--surface-2);outline:none;border-bottom-color:var(--brand)}
+.bud-sig{display:flex;align-items:end;gap:6px;margin-top:10px}.bud-sig .ln{flex:0 0 90px;border-bottom:1px solid var(--ink);height:1em}.bud-sig .bud-chair{flex:1;font-weight:600}
+.bud-cap{display:flex;gap:40px;font-size:11px;color:var(--muted);padding-left:48px}.bud-my{font-size:12px;color:var(--muted);margin-top:8px;padding-left:48px}
+h2.bud-title{text-align:center;font-size:17px;margin:0 0 14px;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:6px}
+h2.bud-title .bud-tt{width:auto;field-sizing:content;min-width:16ch;max-width:100%;text-align:center;font-weight:700}
+table.rep.bud td.pin{padding:3px 8px}
+table.rep.bud td.pin input{font:inherit;font-size:14px;width:130px;padding:5px 8px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.bud-org{resize:none;field-sizing:content;min-height:0;line-height:1.35;overflow:hidden}
+table.rep.bud .pv{display:none}
+table.rep.bud .fakt{color:var(--muted);font-size:12.5px;font-weight:400}
+table.rep.bud td.over{color:var(--danger)}
+@media (max-width:640px){.bud-head{grid-template-columns:1fr;gap:16px}
+  table.rep.bud td.name{min-width:0;white-space:normal}table.rep.bud td.pin input{width:88px;padding:5px 6px}table.rep.bud td.code{width:34px}
+  h2.bud-title .bud-tt{min-width:0;width:100%;field-sizing:fixed}table.rep.bud .fakt{display:none}
+  table.rep.bud th{white-space:normal;padding:6px 4px}table.rep.bud td{padding:5px 4px}.bud-side{min-width:0}.bud-org{field-sizing:fixed;height:auto;min-height:3.4em;white-space:normal}.plan-sheet{min-width:0;max-width:100%}}
+/* telefon / brauzer versiyası: çap düymələri gizlədilir */
+html.web .print-btn,html.web #exportBtn,html.web #mImport,html.web #mReplace,html.web #mClear,html.web #planImp,html.web #planExp,html.web #wbOut,html.web #backupBtn{display:none!important}
+@media print{
+body.printing .print-target.plan-sheet .fakt,body.printing .print-target.plan-sheet>.hint,body.printing .print-target.plan-sheet .form-actions{display:none!important}
+body.printing .print-target.plan-sheet .bud-t{border:0!important;background:none!important;padding:0!important;line-height:1.25}
+body.printing .print-target.plan-sheet .bud-org{height:auto}
+body.printing .print-target.plan-sheet table.rep.bud td.pin{padding:1.5px 5px}
+body.printing .print-target.plan-sheet table.rep.bud td.pin input{display:none}
+body.printing .print-target.plan-sheet table.rep.bud .pv{display:inline}
+body.printing .print-target.plan-sheet .bud-head{font-size:10.5px;gap:18px;margin:0 0 8px}
+body.printing .print-target.plan-sheet .bud-side{gap:0}
+body.printing .print-target.plan-sheet .bud-sig{margin-top:4px}
+body.printing .print-target.plan-sheet .bud-cap{font-size:8.5px}
+body.printing .print-target.plan-sheet .bud-my{font-size:9px;margin-top:2px}
+body.printing .print-target.plan-sheet h2.bud-title{font-size:12.5px;margin:0 0 6px;gap:4px}
+body.printing .print-target.plan-sheet .tbl-wrap{margin-top:6px!important}
+body.printing .print-target.plan-sheet table.rep.bud td,body.printing .print-target.plan-sheet table.rep.bud th{padding:1px 5px;line-height:1.15}
+body.printing .print-target.plan-sheet table.rep.bud td.name{white-space:nowrap}}
+.fit-measure .plan-sheet .fakt,.fit-measure .plan-sheet>.hint,.fit-measure .plan-sheet .form-actions{display:none!important}
+.fit-measure .plan-sheet .bud-t{border:0!important;background:none!important;padding:0!important;line-height:1.25}
+.fit-measure .plan-sheet .bud-org{height:auto}
+.fit-measure .plan-sheet table.rep.bud td.pin{padding:1.5px 5px}
+.fit-measure .plan-sheet table.rep.bud td.pin input{display:none}
+.fit-measure .plan-sheet table.rep.bud .pv{display:inline}
+.fit-measure .plan-sheet .bud-head{font-size:10.5px;gap:18px;margin:0 0 8px}
+.fit-measure .plan-sheet .bud-side{gap:0}
+.fit-measure .plan-sheet .bud-sig{margin-top:4px}
+.fit-measure .plan-sheet .bud-cap{font-size:8.5px}
+.fit-measure .plan-sheet .bud-my{font-size:9px;margin-top:2px}
+.fit-measure .plan-sheet h2.bud-title{font-size:12.5px;margin:0 0 6px;gap:4px}
+.fit-measure .plan-sheet .tbl-wrap{margin-top:6px!important}
+.fit-measure .plan-sheet table.rep.bud td,.fit-measure .plan-sheet table.rep.bud th{padding:1px 5px;line-height:1.15}
+.fit-measure .plan-sheet table.rep.bud td.name{white-space:nowrap}
+.plan-grid table.reg td input{font:inherit;font-size:14px;width:130px;padding:6px 8px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.stack{max-width:820px;margin:0 auto;display:grid;gap:18px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;transition:.25s;pointer-events:none;z-index:20;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.col{display:grid;gap:20px;min-width:0}
+.org-card{--c1:#0E5263;--c2:#B07A16;--c3:#2C7A4B;--c4:#5468B0;--c5:#B3572B;--c6:#7D5BA6;--c7:#8C9A9D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .org-card{--c1:#5FB3C6;--c2:#E2B256;--c3:#6CC892;--c4:#8EA0E6;--c5:#EE9A77;--c6:#B898DE;--c7:#6F8286}}
+:root[data-theme="dark"] .org-card{--c1:#5FB3C6;--c2:#E2B256;--c3:#6CC892;--c4:#8EA0E6;--c5:#EE9A77;--c6:#B898DE;--c7:#6F8286}
+.org-top{display:flex;justify-content:space-between;align-items:end;gap:10px 16px;flex-wrap:wrap;margin:10px 0 14px}
+.org-top .big{font-family:var(--f-display);font-size:28px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.org-top .big small{font-size:15px;color:var(--muted);font-weight:600;margin-left:4px}
+.org-top .meta{display:flex;gap:18px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.org-top .meta b{display:block;font-size:17px;color:var(--ink);font-family:var(--f-display)}
+.org-strip{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;background:var(--surface-2);margin-bottom:18px}
+.org-strip i{display:block;height:100%;min-width:3px}
+.org-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.org-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline}
+.org-row .nm{display:flex;align-items:center;gap:8px;min-width:0;font-weight:600}
+.org-row .nm span{overflow-wrap:anywhere}
+.org-row .nm .dot{width:10px;height:10px;border-radius:3px;flex:none;align-self:center}
+.org-row .pc{font-variant-numeric:tabular-nums;font-weight:700;color:var(--muted);font-size:13px;text-align:right;white-space:nowrap}
+.org-row .trk{grid-column:1/-1;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;margin-top:4px}
+.org-row .trk i{display:block;height:100%;border-radius:4px;transition:width .5s ease}
+.org-row .sub{grid-column:1/-1;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.org-row .sub b{color:var(--ink);font-size:14px}
+.org-row.none .nm span{font-style:italic;color:var(--muted)}
+@media (max-width:860px){.split{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.row2,.row3{grid-template-columns:1fr}.titles h1{font-size:17px}.kpi .v{font-size:19px}}
+@media print{header.top,.kpis,.notice,.toast{display:none!important}body{background:#fff}main{padding:0}.sheet{box-shadow:none;border:0;max-width:none;padding:0}}
+/* «Çap et» düymələri: hər hesabat bölməsinin sağ yuxarı küncündə; yalnız həmin bölmə çap olunur */
+.printable{position:relative}
+.col>.sheet{max-width:none;margin:0;width:100%}
+.printable>h2{padding-right:112px}
+.print-btn{position:absolute;top:14px;right:14px;z-index:1;font:inherit;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--brand);cursor:pointer}
+.print-btn:hover{border-color:var(--brand);background:var(--brand);color:var(--brand-ink)}
+.print-btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.print-btn svg{width:16px;height:16px;flex:none}
+.print-head{display:none}
+@media print{
+  :root:not([data-theme="x"]){--bg:#fff;--surface:#fff;--surface-2:#F2F5F5;--line:#C9D3D5;--line-strong:#8FA0A4;--ink:#000;--muted:#4A5A5E;--brand:#0E5263;--brand-ink:#fff;--brand-soft:#E3EEF0;--gold:#8A5E0E;--gold-soft:#FBF1DC;--danger:#B3372B;--ok:#2C7A4B;--ok-soft:#DFF0E6;color-scheme:light}
+  .print-btn{display:none!important}
+  body.printing #view :is(.card,.sheet,.kpis,.notice):not(.print-target){display:none!important}
+  body.printing .split,body.printing .col,body.printing .stack{display:block;max-width:none}
+  body.printing .print-target{border:0;box-shadow:none;padding:0;max-width:none;margin:0}
+  body.printing .print-target>h2{padding-right:0}
+  body.printing .print-target .reg-tools,body.printing .print-target #aCopyBox,body.printing .print-target .form-actions{display:none!important}
+  body.printing .print-target>p.mut,body.printing .print-target>.hint{display:none!important}
+  body.printing .print-target .tbl-wrap{overflow:visible}
+  body.printing .print-target table{font-size:12px}
+  body.printing .print-target tr{break-inside:avoid}
+  body.printing .print-target thead{display:table-header-group}
+  body.printing .print-target tr.sel{background:none}
+  body.printing .print-target input{border:0;padding:0;background:none}
+  body.printing .print-head{display:block;margin-bottom:10px;font-size:13px;color:var(--muted)}
+  body.printing .print-head b{color:var(--ink);font-size:14px}
+  @page{size:A4;margin:12mm}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.fld input,.fld select,.fld textarea{min-width:0}
+.fld input[type=date]{padding-right:6px}
+.az-flags{display:grid;gap:6px}.az-flag{display:grid;grid-template-columns:1fr 92px;gap:8px;align-items:center;font-size:13.5px}.az-flag select{padding:5px 6px}
+.mark.logo{border:0;width:46px;height:46px;object-fit:contain;padding:0;background:transparent}
+.doc-picks{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;margin:2px 0 6px}.doc-pick{display:flex;gap:6px;align-items:flex-start;font-size:13px;line-height:1.3;cursor:pointer}.fld .doc-pick input{width:16px;height:16px;padding:0;margin:1px 0 0;flex:none;accent-color:var(--brand)}
+.doc-other{font:inherit;font-size:14px;width:100%;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink)}
+@media screen and (not (prefers-color-scheme:dark)){:root:not([data-theme="dark"]){--bg:#D3DCDE;--surface:#E8EDEE;--line:#C2CDD0;--line-strong:#9AABAF;--brand-soft:#CBDDE1}
+  .fld input,.fld select,.fld textarea,.doc-other,.reg-tools select,.reg-tools input{background:#F2F5F5}}
+.lic-bar{position:relative;z-index:6;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;padding:8px 16px;font-size:14px;background:var(--danger-soft);color:var(--danger);border-bottom:1px solid var(--danger)}
+.lic-bar.warn{background:var(--gold-soft);color:var(--gold);border-color:var(--gold)}
+.lic-bar .btn{padding:4px 12px;font-size:13px}
+.lic-modal{position:fixed;inset:0;z-index:50;background:rgba(10,30,35,.55);display:grid;place-items:center;padding:16px}
+.lic-box{background:var(--surface);color:var(--ink);border-radius:14px;padding:28px;max-width:520px;width:100%;display:grid;gap:12px;justify-items:start;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.lic-box h2{margin:0;font-family:var(--f-display)}.lic-box p{margin:0}
+.lic-mid{display:grid;gap:4px;margin:4px 0 12px;width:100%}.lic-mid-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.lic-mid-row b{font:700 20px/1.2 Consolas,monospace;letter-spacing:.06em;color:var(--brand);background:var(--brand-soft);padding:6px 12px;border-radius:8px}
+.lic-box textarea{width:100%;font:13px monospace;padding:10px;border:1px solid var(--line-strong);border-radius:8px;background:#F2F5F5;color:var(--ink)}
+@media print{.lic-bar,.lic-modal{display:none!important}}
+.author{position:fixed;right:14px;bottom:10px;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px;opacity:.85;pointer-events:none;z-index:5}
+@media print{.author{display:none!important}}
+.gf-bar{margin-top:14px;padding:12px;border:1px dashed var(--line-strong);border-radius:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gf-bar.ask{display:block;border-style:solid;border-color:var(--gold);background:var(--gold-soft)}
+.gf-bar .form-msg{flex-basis:100%}
+details.gf{border:1px solid var(--line);border-radius:10px;padding:0 12px}
+details.gf>summary{cursor:pointer;padding:10px 0;font-weight:600;color:var(--brand)}
+details.gf[open]{padding-bottom:14px;display:grid;gap:14px}
+@media print{.gf-bar,details.gf{display:none!important}}
+/* ===== DİZAYN (v2): hər bölmənin öz rəngi, yumşaq fon, rəngli başlıq zolağı. Çapda da rənglər saxlanılır ===== */
+/* bölmə rəngləri: --acc-l (açıq rejim), --acc-d (tünd rejim) */
+:is([data-sec=report],[data-sec=home],.tab[data-tab=report],.tab[data-tab=home]){--acc-l:#0F7A86;--acc-d:#5CC3CF}
+:is([data-sec=ops],[data-sec=orgs],.tab[data-tab=ops],.tab[data-tab=orgs]){--acc-l:#1F68A8;--acc-d:#72B2EA}
+:is([data-sec=mem],.tab[data-tab=mem]){--acc-l:#4A55B5;--acc-d:#9CA4F2}
+:is([data-sec=sd],[data-sec=bodies],.tab[data-tab=sd],.tab[data-tab=bodies]){--acc-l:#7A4CAE;--acc-d:#C39DEB}
+:is([data-sec=aid],[data-sec=prots],.tab[data-tab=aid],.tab[data-tab=prots]){--acc-l:#AE456B;--acc-d:#EF95B5}
+:is([data-sec=bk],[data-sec=contracts],.tab[data-tab=bk],.tab[data-tab=contracts]){--acc-l:#A1621C;--acc-d:#E9B46A}
+:is([data-sec=letters],[data-sec=events],.tab[data-tab=letters],.tab[data-tab=events]){--acc-l:#2E7A4E;--acc-d:#82D09F}
+:is([data-sec=plan],.tab[data-tab=plan]){--acc-l:#5D7A22;--acc-d:#B7D27C}
+:is([data-sec=settings],.tab[data-tab=settings]){--acc-l:#506577;--acc-d:#A8BAC8}
+*{--acc:var(--acc-l,var(--brand))}
+@media screen{
+/* göz yormayan yumşaq fon: təmiz ağ əvəzinə açıq boz-yaşılımtıl tonlar */
+/* proqram həmişə açıq rejimdədir (Windows qara rejimdə olsa da) */
+:root[data-theme="light"]{color-scheme:light}
+:root:not([data-theme="dark"]){--bg:#CFD9DC;--surface:#F7F9F9;--surface-2:#EBF1F2;--line:#C4D1D4;--line-strong:#A3B4B8;--brand-soft:#D6E7EB}
+  .fld input,.fld select,.fld textarea,.doc-other,.reg-tools select,.reg-tools input,.body-meta input,.ask-in{background:#FDFEFE}
+html,body{margin:0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) *{--acc:var(--acc-d,var(--brand))}}
+:root[data-theme="dark"] *{--acc:var(--acc-d,var(--brand))}
+:root{--acc-soft:color-mix(in srgb,var(--acc) 11%,var(--surface));--hdr1:#0A4552;--hdr2:#137382;--hdr3:#1E8A8F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hdr1:#081C21;--hdr2:#0E3640;--hdr3:#134650}}
+:root[data-theme="dark"]{--hdr1:#081C21;--hdr2:#0E3640;--hdr3:#134650}
+
+/* fon: yuxarıda bölmənin rənginə çalan çox açıq ton */
+body{background:var(--bg) linear-gradient(180deg,color-mix(in srgb,var(--acc) 9%,var(--bg)) 0,var(--bg) 380px) no-repeat}
+main{position:relative}
+
+/* başlıq zolağı */
+header.top{background:linear-gradient(120deg,var(--hdr1),var(--hdr2) 55%,var(--hdr3));border-bottom:0;color:#fff;box-shadow:0 4px 18px -6px rgba(6,40,48,.45)}
+body::before{background:var(--hdr1)}
+header.top .titles h1{color:#fff;letter-spacing:.01em}
+header.top .titles .org{color:rgba(255,255,255,.78)}
+header.top .mark.logo{background:#fff;border-radius:50%;padding:3px;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+header.top .btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);color:#fff}
+header.top .btn:hover{background:rgba(255,255,255,.22);border-color:#fff;color:#fff}
+header.top .btn.primary{background:#fff;border-color:#fff;color:var(--hdr2)}
+header.top .btn.primary:hover{filter:none;background:#EAF6F7;color:var(--hdr1)}
+header.top .periods .lbl,header.top .pnow{color:rgba(255,255,255,.75)}
+header.top .pchip{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff}
+header.top .pchip:hover{border-color:#fff}
+header.top .pchip[aria-pressed="true"]{background:#fff;border-color:#fff;color:var(--hdr2)}
+
+/* bölmə düymələri: hər birinin rəngli nöqtəsi; seçilmiş bölmə səhifəyə «bitişik» qovluq kimi */
+.tabs{gap:1px;margin-bottom:0;padding-top:2px}
+.tab{color:rgba(255,255,255,.82);border-bottom:0;border-radius:10px 10px 0 0;padding:9px 11px 10px;gap:6px;transition:background .15s,color .15s}
+.tab::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--acc-d,#fff);flex:none;opacity:.9}
+.tab:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab[aria-selected="true"]{color:var(--acc);background:color-mix(in srgb,var(--acc) 9%,var(--bg));font-weight:700}
+.tab[aria-selected="true"]::before{background:var(--acc);opacity:1}
+.tab .n{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28);color:#fff}
+.tab[aria-selected="true"] .n{background:var(--acc);border-color:var(--acc);color:#fff}
+.tab:focus-visible{outline-color:#fff}
+
+/* kartlar */
+.card{border:1px solid color-mix(in srgb,var(--acc) 16%,var(--line));border-top:3px solid var(--acc);border-radius:12px;box-shadow:0 1px 2px rgba(16,40,48,.05),0 8px 22px -14px rgba(16,40,48,.28)}
+.sheet{border-top:3px solid var(--acc);border-radius:12px;box-shadow:0 1px 2px rgba(16,40,48,.05),0 8px 22px -14px rgba(16,40,48,.28)}
+.card h2,.lic-box h2{color:color-mix(in srgb,var(--acc) 78%,var(--ink))}
+.card .hint{color:var(--muted)}
+
+/* göstərici kartları (KPI) — hər biri öz rəngində */
+.kpis>.kpi:nth-child(4n+1){--k:#0F7A86}.kpis>.kpi:nth-child(4n+2){--k:#4A55B5}.kpis>.kpi:nth-child(4n+3){--k:#A1621C}.kpis>.kpi:nth-child(4n+4){--k:#AE456B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kpis>.kpi:nth-child(4n+1){--k:#5CC3CF}:root:not([data-theme="light"]) .kpis>.kpi:nth-child(4n+2){--k:#9CA4F2}:root:not([data-theme="light"]) .kpis>.kpi:nth-child(4n+3){--k:#E9B46A}:root:not([data-theme="light"]) .kpis>.kpi:nth-child(4n+4){--k:#EF95B5}}
+.kpi{border:1px solid color-mix(in srgb,var(--k,var(--acc)) 22%,var(--line));border-left:4px solid var(--k,var(--acc));border-radius:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--k,var(--acc)) 13%,var(--surface)),var(--surface) 75%);box-shadow:0 6px 18px -14px rgba(16,40,48,.35)}
+.kpi .l{color:color-mix(in srgb,var(--k,var(--acc)) 65%,var(--muted))}
+.kpi .v{color:color-mix(in srgb,var(--k,var(--acc)) 70%,var(--ink))}
+.bar i,.hb i{background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#fff))}
+
+/* cədvəllər: rəngli başlıq, növbəli sətirlər */
+table.reg thead th{background:color-mix(in srgb,var(--acc) 10%,var(--surface));color:color-mix(in srgb,var(--acc) 70%,var(--ink));border-bottom:2px solid color-mix(in srgb,var(--acc) 35%,var(--line))}
+table.reg thead th:first-child{border-top-left-radius:8px}table.reg thead th:last-child{border-top-right-radius:8px}
+table.reg tbody tr:nth-child(even):not(.sel):not(.ret){background:color-mix(in srgb,var(--acc) 3.5%,var(--surface))}
+table.reg tbody tr[data-id]:hover{background:color-mix(in srgb,var(--acc) 8%,var(--surface))}
+table.reg tbody tr.sel{background:color-mix(in srgb,var(--acc) 15%,var(--surface))}
+table.reg tbody tr.sel>td:first-child{box-shadow:inset 3px 0 0 var(--acc)}
+
+/* düymələr və sahələr */
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 4px 12px -6px color-mix(in srgb,var(--acc) 70%,transparent)}
+.btn.primary:hover{color:#fff;filter:brightness(1.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#0A1F24}}
+:root[data-theme="dark"] .btn.primary{color:#0A1F24}
+.fld input:focus,.fld select:focus,.fld textarea:focus,.reg-tools input:focus,.reg-tools select:focus{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 16%,transparent);outline:none}
+.fld label{color:color-mix(in srgb,var(--acc) 40%,var(--muted))}
+.btn:focus-visible,.pchip:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,tr[tabindex]:focus-visible{outline-color:var(--acc)}
+.print-btn{color:var(--acc)}.print-btn:hover{background:var(--acc);border-color:var(--acc);color:#fff}
+.doc-btn{background:var(--acc);border-color:var(--acc)}
+.subtab[aria-selected="true"],main .pchip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+.subtab:hover,main .pchip:hover{border-color:var(--acc)}
+.files{border-color:color-mix(in srgb,var(--acc) 35%,var(--line))}
+.files.over{border-color:var(--acc);background:var(--acc-soft)}
+.file{background:color-mix(in srgb,var(--acc) 5%,var(--surface-2))}
+.mut .sst{color:var(--acc)}
+.author{border-color:color-mix(in srgb,var(--acc) 25%,var(--line));color:color-mix(in srgb,var(--acc) 60%,var(--muted))}
+}
+/* çap: rənglər bozarmasın — başlıqlar, cədvəl başlıqları və cəm sətirləri bölmənin rəngində çap olunur */
+@media print{
+#updBar{display:none!important}
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+body.printing .print-target>h2,body.printing .print-target h2,body.printing .print-target h3{color:color-mix(in srgb,var(--acc) 85%,#000)!important}
+body.printing .print-target>h2{border-bottom:2px solid var(--acc);padding-bottom:4px}
+body.printing .print-head b{color:color-mix(in srgb,var(--acc) 85%,#000)}
+body.printing .print-target :is(table.reg,table.rep) thead th{background:color-mix(in srgb,var(--acc) 14%,#fff)!important;color:color-mix(in srgb,var(--acc) 80%,#000)!important;border-bottom:2px solid var(--acc)!important}
+body.printing .print-target table.reg tbody tr:nth-child(even){background:color-mix(in srgb,var(--acc) 5%,#fff)!important}
+body.printing .print-target :is(table.reg,table.rep) tr.tot td,body.printing .print-target table.reg tfoot td{background:#FBF1DC!important;color:#5A3D08!important}
+body.printing .print-target .hb i,body.printing .print-target .bar i{background:var(--acc)!important}
+body.printing .print-target .retn,body.printing .print-target .retd{color:#C62828!important}
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <img class="mark logo" src="logo.png" alt="MİHİ RB" title="MİHİ RB">
+      <div class="titles"><h1>Gəlir və xərclər hesabatı</h1><div class="org" id="hdrOrg"></div></div>
+      <div class="top-actions"><button class="btn" id="backupBtn" title="Bütün məlumatları ehtiyat nüsxə faylına yazır" hidden>Ehtiyat nüsxə</button><button class="btn primary" id="exportBtn">Excel-ə çıxar</button></div>
+    </div>
+    <div class="periods" id="periods"></div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap"><div id="notice" class="notice" hidden></div><div id="view"></div></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="author">AzerSoft LLC</div>
+
+<script src="xlsx.full.min.js"></script>
+<script>
+"use strict";
+const UI_VER=2; /* ekran hissəsinin versiyası — hər internet yeniləməsində artırılır (YENILEME_HAZIRLA bunu oxuyur) */
+/* Rows of the official form «Cədvəl 2» (code, name) */
+const ROWS=[["1", "Gəlirlər", null, null], ["1.1", "Üzvlük haqlarından daxilolmalar", 58500, 34062.22], ["1.2", "Təsərrüfat orqanından daxilolmalar", null, null], ["1.3", "Yollayışların qismən dəyərinin ödənilməsindən daxilolmalar", null, null], ["1.4", "Kommersiya fəaliyyətindən gəlirlər", null, null], ["1.5", "İnvestisiya fəaliyyətindən", null, null], ["1.6", "İcarə gəlirləri", null, null], ["1.7", "Digər həmkarlar ittifaqlarından daxilolmalar", null, null], ["1.8", "Dövlət büdcəsindən ayrılan vəsait", null, null], ["1.9", "Həmkarlar ittifaqının əvvəlki ildən yığılmış sərbəst vəsait", 4042, null], ["1.10", "Qanunla qadağan edilməyən digər gəlirlər", null, 100], ["", "Cəmi gəlirlər", null, null], ["2", "Xərclər", null, null], ["2.1", "Mədəni-kütləvi tədbirlərin təşkil edilməsi", null, null], ["2.1.1", "Bayram və əlamətdar günlər ilə bağlı tədbirlərin keçirilməsi", 4600, 3301.73], ["2.1.2", "Kütləvi gəzintilərin təşkili", 700, 800], ["2.1.3", "Digər mədəni-kütləvi tədbirlərin təşkil edilməsi", null, 5323.74], ["2.2", "Həmkarlar ittifaqı üzvlərinin sağlamlığının təşkili", null, null], ["2.2.1", "Sanator-kurort və istirahət mərkəzlərinə yollayışların verilməsi", 7313, 3288.87], ["2.2.2", "Uşaq sağlamlıq düşərgələrinin təşkili", null, null], ["2.2.3", "Həmkarlar ittifaqlarının sanator-kurort və istirahət mərkəzlərinin inkişafı", null, null], ["2.3", "Təhsil və idman tədbirlərinin təşkili", null, null], ["2.3.1", "Həmkarlar ittifaqı kadrlarının hazırlanması, təhsil haqqının ödənilməsi", null, null], ["2.3.2", "İdman yarışlarının və digər kütləvi idman tədbirlərinin keçirilməsi", null, null], ["2.3.3", "Digər təhsil və idman tədbirlərin təşkili", null, null], ["2.4", "Maddi yardımların verilməsi", null, null], ["2.4.1", "Həmkarlar ittifaqı üzvlərinə birdəfəlik maddi yardımların verilməsi", 5300, 4710], ["2.4.2", "Həmkarlar ittifaqının himayəsinə götürülmüş şəxslərə maddi yardımların verilməsi", null, null], ["2.4.3", "Həmkarlar ittifaqı üzvləri üçün avadanlıq və inventarların alınması", null, null], ["2.5", "Həmkarlar ittifaqı işçilərinin əməkhaqqı xərcləri", null, null], ["2.5.1", "Həmkarlar İttifaqı işçilərinin əməkhaqqı", 12240, 7969.1], ["2.5.2", "Həmkarlar ittifaqı işçilərinin bayram və digər əlamətdar günlərlə bağlı mükafatlandırılması", 1020, 872.8], ["2.5.3", "Sosial-məişət xərcləri", null, null], ["2.5.4", "Məcburi vergi və digər ödənişlər", 2411, 1081.88], ["2.6", "Həmkarlar ittifaqının təsərrüfat və saxlanma xərcləri", null, null], ["2.6.1", "Dəftərxana və təsərrüfat xərcləri", null, 418.47], ["2.6.2", "Əsas vəsaitlərin və qeyri maddi aktivlərin alınması xərcləri", null, null], ["2.6.3", "Bank xidməti və plastik kart xərcləri", 300, 207.19], ["2.6.4", "Ezamiyyə xərcləri", 4000, 112], ["2.6.5", "İctimaiyyətlə əlaqələr və reklam xərcləri", null, null], ["2.6.6", "Rabitə və internet xidmətləri haqqının ödənilməsi", 450, 400], ["2.6.7", "Kommunal xidmətlərin haqqının ödənilməsi", null, null], ["2.6.8", "Nəqliyyat vasitələrinin saxlanması xərcləri", null, null], ["2.6.9", "Digər mal, iş və xidmətlərin haqqının ödənilməsi", null, null], ["2.7", "Həmkarlar ittifaqlarının balansında və istifadəsində olan əmlaklarda aparılan təmir işləri", null, null], ["2.7.1", "Əsaslı təmir işləri", null, null], ["2.7.2", "Cari təmir işləri", null, null], ["2.8", "Beynəlxalq əlaqələrin yaradılması üzrə xərclər", null, null], ["2.8.1", "Beynəlxalq təşkilatlara üzvlük haqları", null, null], ["2.8.2", "Beynəlxalq əlaqələrin yaradılması üzrə digər xərclər", null, null], ["2.9", "Həmkarlar ittifaqına üzvlük haqlarından yuxarı və ya aşağı həmkarlar ittifaqı təşkilatlarına ayırmalar", null, null], ["2.9.1", "Həmkarlar ittifaqından yuxarı həmkarlar ittifaqı təşkilata ayrılmalar", 9750, 6814.16], ["2.9.2", "Həmkarlar ittifaqından aşağı həmkarlar ittifaqı təşkilatlarına ayrılmalar", null, null], ["2.10", "Həmkarlar ittifaqının tabeliyində fəaliyyət göstərən müəssisə və təşkilatların maliyyələşməsi", null, null], ["2.11", "Sair xərclər", 1400, 39], ["", "Cəmi xərclər", null, null]].map(r=>({code:r[0],name:r[1]})).filter(r=>r.code);
+const isParent=c=>ROWS.some(r=>r.code!==c&&r.code.startsWith(c+"."));
+const LEAVES=ROWS.filter(r=>!isParent(r.code)&&r.code!=="1"&&r.code!=="2");
+const INC=LEAVES.filter(r=>r.code.startsWith("1.")&&r.code!=="1.9");
+const EXP_SECTIONS=ROWS.filter(r=>/^2\.\d+$/.test(r.code));
+const NAME=Object.fromEntries(ROWS.map(r=>[r.code,r.name]));
+const childrenOf=c=>ROWS.filter(r=>r.code.startsWith(c+".")&&r.code.split(".").length===c.split(".").length+1);
+const MONTHS=["Yanvar","Fevral","Mart","Aprel","May","İyun","İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
+
+/* ---------- state ---------- */
+let tab="report";try{tab=localStorage.getItem("hi2_tab")||"report"}catch(e){}
+if(tab==="letters")tab="report";
+if(location.hash.length>1&&["report","ops","aid","sd","bk","mem","plan","settings"].includes(location.hash.slice(1)))tab=location.hash.slice(1);
+const Y0=new Date().getFullYear();
+let form={org:"",start:`${Y0}-01-01`,end:`${Y0}-12-31`,rb:{c6:0,d6:0,c7:0,d7:0},bal:{c12:0,c13:0,c14:0,d12:0,d13:0,d14:0},plan:{},chair:""};
+let ops=[],aid=[],letters=[],bk=[],mem=[];let bkEdit=null,bkConfirm=null,bkDraft=null;let lEdit=null,lConfirm=null,lDraft=null,lq="",lst="";let aEdit=null,aConfirm=null,aDraft=null,aAll=false,aq="";let db=null,mode="loading",loaded=false;
+let editId=null,confirmDel=null,q="",fsec="",draft=null;
+
+/* ==========================================================================
+   Lisenziya (AzerSoft LLC). Açar: HIK1.<məlumat>.<Ed25519 imzası>
+   Proqramda yalnız yoxlama (açıq) açarı var; yeni lisenziyanı yalnız
+   gizli açarın sahibi yarada bilər.
+   ========================================================================== */
+const LIC_PUB_X="A6WIQwFuXDFwck2VXgTyCuaDY4Re16bSYCe4ZFjK6dI";
+let LIC={status:"checking"};
+const licBlocked=()=>LIC.status!=="ok";
+const licDays=()=>{if(!LIC.until||!LIC.today)return null;return Math.round((new Date(LIC.until)-new Date(LIC.today))/864e5)};
+function licGuard(){if(licBlocked()){const e=new Error("license");e.code="license";toast(licMsg());throw e}}
+function licMsg(){return LIC.status==="expired"&&LIC.demo?"Demo müddəti bitib — yeni qeyd yazmaq bağlıdır. Tam lisenziya üçün AzerSoft LLC ilə əlaqə saxlayın.":LIC.status==="expired"?"Lisenziyanın müddəti bitib — yeni qeyd yazmaq bağlıdır.":LIC.status==="notyet"?`Lisenziya hələ qüvvəyə minməyib — ${dmy(LIC.from)}-dən başlayır.`:"Proqram lisenziyasızdır — yeni qeyd yazmaq bağlıdır."}
+const b64uBytes=s=>Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((s.length+3)%4)),c=>c.charCodeAt(0));
+async function licVerifyBrowser(key){
+  const m=String(key||"").replace(/\s+/g,"").match(/^HIK1\.([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]+)$/);if(!m)return{ok:false,reason:"format"};
+  try{const k=await crypto.subtle.importKey("jwk",{kty:"OKP",crv:"Ed25519",x:LIC_PUB_X},{name:"Ed25519"},false,["verify"]);
+    const data=b64uBytes(m[1]);if(!await crypto.subtle.verify({name:"Ed25519"},k,b64uBytes(m[2]),data))return{ok:false,reason:"sign"};
+    return{ok:true,p:JSON.parse(new TextDecoder().decode(data))}}catch(e){return{ok:false,reason:"sign"}}}
+function browserMid(){let v="";try{v=localStorage.getItem("hi2_mid")||""}catch(e){}
+  if(!/^[0-9A-F]{4}(-[0-9A-F]{4}){3}$/.test(v)){v=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>x.toString(16).padStart(2,"0")).join("").toUpperCase().match(/.{4}/g).join("-");try{localStorage.setItem("hi2_mid",v)}catch(e){}}return v}
+function licStateFrom(p,today){const mid=browserMid();if(!p.mid)return{status:"invalid",reason:"nomid",today,mid};if(p.mid!==mid)return{status:"invalid",reason:"othermachine",today,mid};return{mid,status:today>p.until?"expired":(p.from&&today<p.from?"notyet":"ok"),org:p.org,from:p.from,until:p.until,id:p.id,demo:!!p.demo,today}}
+async function licLoad(){
+  if(window.api&&window.api.licGet){LIC=window.api.licGet();return}
+  const today=todayISO();let key="";try{key=localStorage.getItem("hi2_lic")||""}catch(e){}
+  if(!key){LIC={status:"none",today,mid:browserMid()};return}
+  const r=await licVerifyBrowser(key);LIC=r.ok?licStateFrom(r.p,today):{status:"invalid",reason:r.reason,today,mid:browserMid()}}
+async function licActivate(key){
+  key=String(key||"").replace(/\s+/g,"");
+  if(window.api&&window.api.licSet){const r=window.api.licSet(key);if(r.status==="invalid")return r;LIC=r;return r}
+  const r=await licVerifyBrowser(key);if(!r.ok)return{status:"invalid",reason:r.reason};
+  const st=licStateFrom(r.p,todayISO());if(st.status==="invalid")return st;
+  try{localStorage.setItem("hi2_lic",key)}catch(e){}LIC=st;return LIC}
+const licReasonText=r=>r==="format"?"Açarın formatı səhvdir. Onu tam kopyalayıb yapışdırın.":r==="othermachine"?"Bu açar başqa kompüter üçün verilib. Bu kompüterin kodunu AzerSoft LLC-yə göndərin.":r==="nomid"?"Bu açar köhnə növdür (kompüter koduna bağlı deyil). Bu kompüterin kodunu göndərib yeni açar alın.":"Açar etibarsızdır (imza uyğun gəlmir).";
+/* Kompüter kodu bloku: kod + «Kopyala» */
+function licMidHTML(id){const mid=LIC.mid||"";return mid?`<div class="lic-mid"><span class="mut">${window.api?"Bu kompüterin kodu":"Bu cihazın kodu"}</span><div class="lic-mid-row"><b id="${id}">${esc(mid)}</b><button class="btn" type="button" data-copymid="${esc(mid)}">Kopyala</button></div></div>`:""}
+function bindMidCopy(root){(root||document).querySelectorAll("[data-copymid]").forEach(b=>b.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(b.dataset.copymid);toast("Kompüter kodu kopyalandı")}catch(e){toast("Kodu əl ilə köçürün: "+b.dataset.copymid)}}))}
+function licStatusHTML(){const d=licDays();
+  if(LIC.status==="ok")return`<span class="st done">Aktivdir${LIC.demo?" (demo)":""}</span> ${esc(LIC.org||"")} · ${LIC.until>="9999"?"müddətsiz":dmy(LIC.until)+"-dək"}${d!==null&&d<=30?` · <b>${d} gün qalıb</b>`:""}`;
+  if(LIC.status==="expired")return`<span class="st rej">Müddəti bitib</span> ${esc(LIC.org||"")} · ${dmy(LIC.until)}`;
+  if(LIC.status==="notyet")return`<span class="st pend">Hələ başlamayıb</span> ${dmy(LIC.from)}-dən`;
+  if(LIC.status==="invalid")return`<span class="st rej">${LIC.reason==="othermachine"?"Açar başqa kompüter üçündür":LIC.reason==="nomid"?"Açar köhnə növdür":"Etibarsız açar"}</span>`;
+  return`<span class="st pend">Lisenziya yoxdur</span>`}
+function licCardHTML(){return`<section class="card" id="licCard"><h2>Lisenziya</h2>
+  <p class="hint">Proqram AzerSoft LLC-yə məxsusdur. Lisenziya açarını AzerSoft LLC verir.</p>
+  ${licMidHTML("licMidS")}
+  <div class="fld" style="margin-bottom:12px"><label>Vəziyyət</label><div>${licStatusHTML()}</div>${LIC.id?`<span class="help">Lisenziya №: ${esc(LIC.id)}</span>`:""}</div>
+  <div class="fld"><label for="lic-key">${LIC.status==="ok"?"Yeni açar (uzatmaq üçün)":"Lisenziya açarı"}</label><textarea id="lic-key" rows="3" spellcheck="false" placeholder="HIK1.…" style="font:13px monospace"></textarea></div>
+  <div class="form-actions" style="margin-top:10px"><button class="btn primary" type="button" id="licGo">Aktivləşdir</button><span class="form-msg" id="licMsg"></span></div></section>`}
+function bindLicCard(){const b=document.getElementById("licGo");if(!b)return;bindMidCopy(document.getElementById("licCard"));
+  b.addEventListener("click",async()=>{const m=document.getElementById("licMsg");const r=await licActivate(document.getElementById("lic-key").value);
+    if(r.status==="invalid"){m.className="form-msg err";m.textContent=licReasonText(r.reason);return}
+    toast(r.status==="ok"?"Lisenziya aktivləşdi":r.status==="expired"?"Bu açarın müddəti artıq bitib":"Açar qəbul edildi");licGate();render()})}
+/* Lisenziya yoxdursa və ya bitibsə: ekranın yuxarısında zolaq; ilk açılışda açar pəncərəsi */
+let licDismissed=false;
+function licGate(){
+  let bar=document.getElementById("licBar");
+  const d=licDays();const warn=LIC.status==="ok"&&d!==null&&(d<=30||LIC.demo);
+  if(LIC.status==="ok"&&!warn){bar&&bar.remove();document.getElementById("licModal")?.remove();return}
+  if(!bar){bar=document.createElement("div");bar.id="licBar";document.body.prepend(bar)}
+  bar.className="lic-bar"+(warn?" warn":"");
+  bar.innerHTML=warn&&LIC.demo?`<b>Demo versiya</b> — bitməsinə <b>${d+1} gün</b> qalıb (${dmy(LIC.until)}-dək). Tam lisenziya üçün AzerSoft LLC ilə əlaqə saxlayın. <button class="btn" type="button" id="licOpen">Açar daxil et</button>`:warn?`Lisenziyanın bitməsinə <b>${d} gün</b> qalıb (${dmy(LIC.until)}). Uzatmaq üçün AzerSoft LLC ilə əlaqə saxlayın.`
+    :`${esc(licMsg())} ${window.api?"Məlumatlara baxmaq və Excel-ə çıxarmaq açıqdır.":"Məlumatlara baxmaq açıqdır."} <button class="btn" type="button" id="licOpen">Lisenziya açarı daxil et</button>`;
+  document.getElementById("licOpen")?.addEventListener("click",()=>{tab="settings";render();setTimeout(()=>document.getElementById("lic-key")?.focus(),50)});
+  if((LIC.status==="none"||LIC.status==="invalid")&&!licDismissed&&!document.getElementById("licModal")){
+    const md=document.createElement("div");md.id="licModal";md.className="lic-modal";
+    md.innerHTML=`<div class="lic-box" role="dialog" aria-modal="true" aria-labelledby="licT"><img src="logo.png" alt="" style="width:72px;height:72px"><h2 id="licT">Proqramı aktivləşdirin</h2>
+      <p class="mut">HİK-hesabat AzerSoft LLC-yə məxsusdur. Lisenziya açarı almaq üçün <b>${window.api?"bu kompüterin kodunu":"bu cihazın kodunu"}</b> AzerSoft LLC-yə göndərin, aldığınız açarı aşağıya yapışdırın.</p>
+      ${licMidHTML("licMidM")}
+      <textarea id="licModalKey" rows="4" spellcheck="false" placeholder="HIK1.…"></textarea><div class="form-msg" id="licModalMsg"></div>
+      <div class="form-actions"><button class="btn primary" type="button" id="licModalGo">Aktivləşdir</button><button class="btn ghost" type="button" id="licModalLater">Yalnız baxış</button></div></div>`;
+    document.body.append(md);bindMidCopy(md);
+    document.getElementById("licModalGo").addEventListener("click",async()=>{const r=await licActivate(document.getElementById("licModalKey").value);
+      if(r.status==="invalid"){const m=document.getElementById("licModalMsg");m.className="form-msg err";m.textContent=licReasonText(r.reason);return}
+      md.remove();toast(r.status==="ok"?"Lisenziya aktivləşdi":"Açar qəbul edildi");licGate();render()});
+    document.getElementById("licModalLater").addEventListener("click",()=>{licDismissed=true;md.remove()});
+  }
+}
+
+
+/* ==========================================================================
+   RB onlayn hesabatları (Google Forms)
+   Proqram formanı sizin məlumatlarınızla DOLDURULMUŞ açır; siz yoxlayıb
+   «Отправить» (Göndər) düyməsini özünüz basırsınız. Heç nə avtomatik getmir.
+   ========================================================================== */
+const GF_URL={"sd": "e/1FAIpQLSdAO9aKHEtj01XGz7A2NzSdS2wh-R-1NVn_Q3PvPDLrgW0kGA", "aid": "e/1FAIpQLSc0VvvLxZnvUHndxem3Zj29Ws7qSgVMfqg6M66mgoZfAogn_A", "let": "e/1FAIpQLSc4bbSldYR4z6OYbSZpJAfgFivOU3pgUluSGwn01gjcNQRuqQ"};
+const GFO={"KOM": ["Abşeron rayon komitəsi MİHİ", "Ağcabədi rayon komitəsi MİHİ", "Ağdam rayon komitəsi MİHİ", "Ağdaş rayon komitəsi MİHİ", "Ağstafa rayon komitəsi MİHİ", "Ağsu rayon komitəsi MİHİ", "Astara rayon komitəsi MİHİ", "Balakən rayon komitəsi MİHİ", "Bərdə rayon komitəsi MİHİ", "Beyləqan rayon komitəsi MİHİ", "Biləsuvar rayon komitəsi MİHİ", "Cəbrayıl rayon komitəsi MİHİ", "Cəlilabad rayon komitəsi MİHİ", "Daşkəsən rayon komitəsi MİHİ", "Füzuli rayon komitəsi MİHİ", "Gədəbəy rayon komitəsi MİHİ", "Gəncə şəhər komitəsi MİHİ", "Goranboy rayon komitəsi MİHİ", "Göyçay rayon komitəsi MİHİ", "Göygöl rayon komitəsi MİHİ", "Hacıqabul rayon komitəsi MİHİ", "İmişli rayon komitəsi MİHİ", "İsmayıllı rayon komitəsi MİHİ", "Kəlbəcər rayon komitəsi MİHİ", "Kürdəmir rayon komitəsi MİHİ", "Laçın rayon komitəsi MİHİ", "Lənkəran rayon komitəsi MİHİ", "Lerik rayon komitəsi MİHİ", "Masallı rayon komitəsi MİHİ", "Mingəçevir şəhər komitəsi MİHİ", "Naftalan şəhər komitəsi MİHİ", "Neftçala rayon komitəsi MİHİ", "Oğuz rayon komitəsi MİHİ", "Qax rayon komitəsi MİHİ", "Qazax rayon komitəsi MİHİ", "Qəbələ rayon komitəsi MİHİ", "Qobustan rayon komitəsi MİHİ", "Quba rayon komitəsi MİHİ", "Qubadlı rayon komitəsi MİHİ", "Qusar rayon komitəsi MİHİ", "Saatlı rayon komitəsi MİHİ", "Sabirabad rayon komitəsi MİHİ", "Şabran rayon komitəsi MİHİ", "Salyan rayon komitəsi MİHİ", "Şamaxı rayon komitəsi MİHİ", "Samux rayon komitəsi MİHİ", "Şəki şəhər komitəsi MİHİ", "Şəmkir rayon komitəsi MİHİ", "Şirvan şəhər komitəsi MİHİ", "Siyəzən rayon komitəsi MİHİ", "Sumqayıt şəhər komitəsi MİHİ", "Şuşa rayon komitəsi MİHİ", "Tərtər rayon komitəsi MİHİ", "Tovuz rayon komitəsi MİHİ", "Ucar rayon komitəsi MİHİ", "Xaçmaz rayon komitəsi MİHİ", "Xızı rayon komitəsi MİHİ", "Xocalı rayon komitəsi MİHİ", "Xocavənd rayon komitəsi MİHİ", "Yardımlı rayon komitəsi MİHİ", "Yevlax rayon komitəsi MİHİ", "Zaqatala rayon komitəsi MİHİ", "Zəngilan rayon komitəsi MİHİ", "Zərdab rayon komitəsi MİHİ"], "IQT": ["Abşeron_Xızı", "Gəncə_Daşkəsən", "Şəki_Zaqatala", "Lənkəran_Astara", "Quba_Xaçmaz", "Mərkəzi_Aran", "Qarabağ", "Şərqi_Zəngəzur", "Dağlıq_Şirvan", "Naxçıvan", "Bakı", "Qazax_Tovuz", "Mil_Muğan", "Şirvan_Salyan", "Qeyd_olunmayıb"], "RAY": ["Abşeron", "Ağcabədi", "Ağdam", "Ağdərə", "Ağdaş", "Ağstafa", "Ağsu", "Astara", "Babək", "Balakən", "Bərdə", "Beyləqan", "Biləsuvar", "Binəqədi", "Cəbrayıl", "Culfa", "Cəlilabad", "Daşkəsən", "Füzuli", "Goranboy", "Göyçay", "Göygöl", "Gədəbəy", "Gəncə", "Hacıqabul", "Xaçmaz", "Xankəndi", "Xocalı", "Xocavənd", "Xırdalan", "Xızı", "Xətai", "Xəzər", "İmişli", "İsmayıllı", "Kəlbəcər", "Kəngərli", "Kürdəmir", "Laçın", "Lerik", "Lənkəran", "Masallı", "Mingəçevir", "Naftalan", "Naxçıvan", "Neftçala", "Nizami", "Nərimanov", "Nəsimi", "Oğuz", "Ordubad", "Pirallahı", "Qax", "Qazax", "Qaradağ", "Qobustan", "Quba", "Qubadlı", "Qusar", "Qəbələ", "Sabirabad", "Sabunçu", "Saatlı", "Salyan", "Samux", "Siyəzən", "Sumqayıt", "Suraxanı", "Sədərək", "Şabran", "Şahbuz", "Şamaxı", "Şirvan şəhəri", "Şuşa", "Şəki", "Şəmkir", "Şərur", "Tovuz", "Tərtər", "Ucar", "Yardımlı", "Yasamal", "Yevlax", "Zaqatala", "Zəngilan", "Zərdab"], "SD_CAUSE": ["Tibbi dəstək", "Təbii fəlakət / qəza hallarında dəstək", "Şəhid ailəsi üzvünə dəstək", "Müharibə iştirakçısına (Qazi/Veteran) dəstək", "Maddi və Əşyavi dəstək", "Təhsil yönümlü dəstək", "Mədəni və İctimai fəaliyyət üzrə dəstək", "İdman və sağlamlıq dəstəyi", "Digər sosial dəstək"], "SD_KIND": ["Geyim dəsti (köynək, şalvar, palto, ayaqqabı və s.)", "Məktəbli çantası və məktəbli ləvazimatları", "Xüsusi məktəbli forması", "Elektron avadanlıq (planşet, kompüter, kalkulyator və s.)", "Ərzaq, Q/Ərzaq sovqatı", "Kitab kartı və ya kitab mağazası üçün kupon", "Uşaq düşərgələri üçün yollayışlar (yay və qış düşərgəsi)", "Sağlamlıq düşərgələri (uşaqlar üçün sağlam həyat tərzi proqramı)", "Ekskursiyalar (rayon, şəhər, tarixi yerlərə səfər)", "Yaradıcılıq dərsləri üçün kuponlar (rəsm, musiqi, teatr studiyaları üçün dəstək)", "İdman klubu/üzgüçülük hovuzu üçün abunə kartlar", "Tibbi müayinə paketləri (uşaq üçün illik müayinələrdə güzəşt)", "Hədiyyə paketi", "Teatr/Konsert/Kino bileti", "Muzey ziyarəti bileti", "İdman tədbiri bileti", "Tədris materialları", "Bayram hədiyyəsi", "Digər"], "AID_STATUS": ["Şəhər", "Rayon", "İlk"], "AID_BASIS": ["Üzvün müraciəti", "HİT təşəbbüsü"], "AID_REASON": ["Xəstəlik", "Tibbi əməliyyat", "Yubiley yaş", "İpoetka kreditinə dəstək", "Ailə üzvünün vəfatı", "Ailə həyatı qurub", "Övladı dünyaya gəlib", "Təhsilə dəstək", "Təbii fəlakət / qəza", "Övladı əsgəri xidmətə gedən", "Övladı 1-ci sinifə gedən", "Övladı Ali məktəbə qəbul olan", "Şəhid ailəsi üzvü", "Müharibə iştirakçısı (Qazi/Veteran)", "Digər sosial səbəblər"], "AID_FUND": ["HİK büdcəsi"], "AID_PAY": ["Bank köçürməsi", "Nağd"], "AID_BODY": ["HİT-in Rəyasət Heyəti", "Maddi yardım komissiyası", "Respublika Komitəsinin Rəyasət Heyəti"], "L_EXEC": ["Məlumat üçün", "İcra üçün"], "L_TYPE": ["Ərizə", "Şikayət", "Təklif"], "L_FORM": ["İlkin", "Təkrar", "Eyni məzmunlu"], "L_APPL": ["Vətəndaş (Üzv olan)", "Vətəndaş (Üzv olmayan)", "Üzvlük müəyyən deyil", "Digər"], "L_GOV": ["Az.Resp. PA.", "Az.Resp. MM.", "Az.Resp. NK.", "Az.Resp. Konst.Məhkəmə.", "Az.Resp. Ali Məhkəmə", "Digər təşkilatlardan", "AHİK-dən", "Vətəndaşdan"], "L_SOC": ["Əlil", "Şəhid ailəsi", "Qazi", "Yoxdur", "Müəyyən olunmamış"], "L_TOPIC": ["Əmək_hüquqlarının_pozulması", "Maddi_yardımın_verilməsi", "Yollayışların_verilməsi", "Əmək_münasibətləri_ilə_bağlı", "Üzvlüklə_bağlı", "Tabe_təşkilatların_fəaliyyəti_ilə_bağlı", "Üzv_təşkilatların_fəaliyyəti_ilə_bağlı", "Digər"], "L_CHAN": ["Məktub", "Elektron məktub", "Telefon (Q/X)", "Teleqram", "Faks", "Digər", "Poçt (Kuryer)", "Əlbəəl", "RSD"], "L_RES": ["Həll olunub", "Qismən təmin edilib", "Rədd edilib (əsassız sayılıb)", "Müvafiq izahat verilib", "Dövlət proqramlarında icrası nəzərdə tutulub", "Aidiyyəti üzrə müraciət etmələri tövsiyə olunmuş", "Baxılmaq üçün aidiyyəti təşkilatlara göndərilib", "Baxılmamış saxlanılıb", "İcradadır"], "L_REDIR": ["Dövlət Miqrasiya Xidməti", "Elm və Təhsil Nazirliyi", "Mədəniyyət Nazirliyi", "Milli Arxiv İdarəsi", "Müdafiə Sənayesi Nazirliyi", "Daxili İşlər Nazirliyi", "Diasporla İş üzrə Dövlət Komitəsi", "Dini Qurumlarla İş üzrə Dövlət Komitəsi", "Dövlət Gömrük Komitəsi", "Dövlət Sərhəd Xidməti", "Dövlət Statistika Komitəsi", "Dövlət Şəhərsalma və Arxitektura Komitəsi", "Dövlət Təhlükəsizliyi Xidməti", "Ədliyyə Nazirliyi", "Ekologiya və Təbii Sərvətlər Nazirliyi", "Əmək və Əhalinin Sosial Müdafiəsi Nazirliyi", "Energetika Nazirliyi", "Gənclər və İdman Nazirliyi", "Kənd Təsərrüfatı Nazirliyi", "MaliyyəNazirliyi", "MüdafiəNazirliyi", "Qaçqınlarınvə Məcburi Köçkünlərin işləri Üzrə Dövlət Komitəsi", "QidaTəhlükəsizliyiAgentliyi", "Rəqəmsal İnkişaf və Nəqliyyat Nazirliyi", "Səfərbərlik və Hərbi Xidmətə Çağırış Üzrə Dövlət Xidməti", "Səhiyyə Nazirliyi", "Xarici İşlər Nazirliyi", "Xüsusi Dövlət Mühafizə Xidməti", "Fövqaladə Hallar Nazirliyi", "Azərbaycan Dövlət Su Ehtiyatları Agentliyi", "Dövlət Vergi Xidməti", "Kiçikvə Orta Biznesin İnkişafı Agentliyi", "Əmlak Məsələləri Dövlət Xidməti", "Baş Prokurorluq", "Dövlət Reklam Agentliyi", "İcbari Tibbi Sığorta üzrə Dövlət Agentliyi", "TƏBİB", "Antiinhisar və İstehlak Bazarına Nəzarət Dövlət Agentliyi", "Bakı Şəhər İcra Hakimiyyəti", "Mərkəzi Bank", "Digər"]};
+
+const GF_DEF={kom:"Şəmkir rayon komitəsi MİHİ",iqt:"Qazax_Tovuz",ray:"Şəmkir",status:"Rayon",resp:"",pay:"Bank köçürməsi",body:"HİT-in Rəyasət Heyəti"};
+const gfCfg=()=>({...GF_DEF,...(form.gf||{})});
+const todayISO=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+const YN=["Bəli","Xeyr"];
+/* Daxil olma kanalı: yalnız iki seçim. Dəyər RB formasındakı mətnlə eynidir */
+const L_CHAN_OPTS=[["Əlbəəl","Əlbəəl"],["Elektron məktub","Elektron"]];
+const gopt=(arr,v,ph)=>(ph!==undefined?`<option value="">${esc(ph)}</option>`:"")+arr.map(x=>`<option${x===v?" selected":""}>${esc(x)}</option>`).join("");
+function genderOf(n){const s=normName(n).toLocaleLowerCase("az");if(/(^|\s)(oğlu|oglu)$/.test(s))return"Kişi";if(/(^|\s)(qızı|qizi)$/.test(s))return"Qadın";return""}
+function normPhone(v){let d=String(v||"").replace(/\D/g,"");if(d.length===12&&d.startsWith("994"))d="0"+d.slice(3);if(d.length===9&&!d.startsWith("0"))d="0"+d;return d}
+function gfLink(kind,pairs){const p=new URLSearchParams();p.set("usp","pp_url");
+  for(const[k,v]of pairs){if(v===undefined||v===null||v==="")continue;p.append("entry."+k,String(v))}
+  return`https://docs.google.com/forms/d/${GF_URL[kind]}/viewform?${p.toString()}`}
+function gfOpenUrl(url){try{if(window.api&&window.api.openForm){window.api.openForm(url);return}}catch(e){}window.open(url,"_blank","noopener")}
+let gfPend=null,aRb="",lRb="";
+const gfBadge=x=>x.gfSent?`<span class="st done" title="RB formasına göndərilib">RB ✓ ${dmy(x.gfSent)}</span>`:`<span class="st pend" title="RB formasına hələ göndərilməyib">RB —</span>`;
+const gfMatch=(x,f)=>!f||(f==="sent"?!!x.gfSent:!x.gfSent);
+const gfFilterSel=(id,v)=>`<select id="${id}" aria-label="RB statusu"><option value=""${v?"":" selected"}>RB: hamısı</option><option value="todo"${v==="todo"?" selected":""}>RB-yə göndərilməyib</option><option value="sent"${v==="sent"?" selected":""}>RB-yə göndərilib</option></select>`;
+
+/* Göstər/gizlə: data-show="sahə=dəyər" */
+function gfToggle(f){if(!f)return;f.querySelectorAll("[data-show]").forEach(el=>{const[k,v]=el.dataset.show.split("=");const inp=f.elements[k];el.hidden=!inp||inp.value!==v})}
+
+/* --- Avtomatik doldurulan dəyərlər (istifadəçi dəyişə bilər) --- */
+/* Səbəb mətnindən RB siyahısındakı səbəbi tapır */
+const AID_REASON_RULES=[[/şəhid/,"Şəhid ailəsi üzvü"],[/qazi|veteran|müharibə iştirak/,"Müharibə iştirakçısı (Qazi/Veteran)"],[/əməliyyat|operasiya/,"Tibbi əməliyyat"],
+  [/xəstə|müalicə|dərman|xərçəng|onkoloj|infarkt|insult|tibbi/,"Xəstəlik"],[/yubiley|\b\d0 yaş|yaşının tamam/,"Yubiley yaş"],[/ipote?ka/,"İpoetka kreditinə dəstək"],
+  [/vəfat|dünyasını dəyiş|yas\b|ölüm/,"Ailə üzvünün vəfatı"],[/toy|ailə həyatı|evlən|nikah/,"Ailə həyatı qurub"],[/dünyaya gəl|doğul|övladı olub|körpə/,"Övladı dünyaya gəlib"],
+  [/əsgər|hərbi xidmət/,"Övladı əsgəri xidmətə gedən"],[/1-ci sinif|birinci sinif|məktəbə ged/,"Övladı 1-ci sinifə gedən"],[/ali məktəb|universitet|tələbə|qəbul olub/,"Övladı Ali məktəbə qəbul olan"],
+  [/təhsil/,"Təhsilə dəstək"],[/fəlakət|qəza|yanğın|sel\b|zəlzələ|daşqın/,"Təbii fəlakət / qəza"]];
+function reasonTypeOf(t){const s=String(t||"").toLocaleLowerCase("az");if(!s)return"";for(const[re,v]of AID_REASON_RULES)if(re.test(s))return v;return"Digər sosial səbəblər"}
+/* Maddi yardımın əsası olan ərizə: bağlı ərizə, yoxdursa eyni adlı son ərizə */
+/* Ərizələr artıq HİK-təşkilatdadır: eyni kompüterdə onun sənədləri oxunur (yalnız oxumaq üçün), köhnə sənədlər də nəzərə alınır */
+let extLetters=[],extAt=0;
+function allLetters(){if(window.api&&window.api.teskilatLetters&&Date.now()-extAt>3000){extAt=Date.now();try{extLetters=window.api.teskilatLetters()||[]}catch(e){extLetters=[]}}
+  const seen=new Set(extLetters.map(x=>x.id));return[...extLetters,...letters.filter(x=>!seen.has(x.id))]}
+function aidLetter(o){const lid=o.letterId||o.fromLetter;const LL=allLetters();let L=lid&&LL.find(x=>x.id===lid);
+  if(!L&&o.name){const k=normName(o.name).toLocaleLowerCase("az");L=LL.filter(x=>normName(x.name).toLocaleLowerCase("az")===k&&(!o.date||(x.date||"")<=o.date)).sort((a,b)=>(b.date||"").localeCompare(a.date||""))[0]}
+  return L||null}
+function aidAuto(o){
+  const L=aidLetter(o);const M=memByName(o.name)||(L&&memByName(L.name));const c=gfCfg();
+  return{basis:o.basis||(L?"Üzvün müraciəti":"HİT təşəbbüsü"),gender:o.gender||genderOf(o.name),
+    birth:o.birth||(M&&M.birth)||(L&&L.birth)||"",fin:o.fin||(M&&M.fin)||(L&&L.fin)||"",
+    member:o.member||(M?(isOut(M)?"Üzv deyil":"Üzvdür"):"Üzvdür"),pos:o.pos||(M&&M.pos)||(L&&L.pos)||"",hiPos:o.hiPos||"",
+    appDate:o.appDate||(L&&L.date)||o.date||"",appNo:o.appNo||(L?L.no||"":"Yoxdur"),reasonType:o.reasonType||reasonTypeOf(o.reason||(L&&L.summary)),
+    docs:o.docs||(L?"Ərizə":"Yoxdur"),decDate:o.decDate||o.date||"",payMethod:o.payMethod||c.pay,body:o.body||c.body}}
+/* Maddi yardım müraciətinə əlavə olunan sənədlər: işarələnən sənədlər vergüllə birləşir */
+const AID_DOCS=["Yoxdur","Ərizə","Şəxsiyyət vəsiqəsi","Epikriz","Xəstəlik vərəqəsi","Tibbi arayış","Doğum haqqında şəhadətnamə","Nikah haqqında şəhadətnamə","Ölüm haqqında şəhadətnamə","Təhsil müəssisəsindən arayış","Hərbi hissədən arayış","Əlillik arayışı","Şəhid ailəsi vəsiqəsi","Qazi vəsiqəsi","Bank rekvizitləri"];
+function docsSync(f){const h=f.elements.docs;if(!h)return;const parts=String(h.value||"").split(",").map(x=>x.trim()).filter(Boolean);
+  f.querySelectorAll("#a-docpick input").forEach(c=>{c.checked=parts.includes(c.value)});
+  const o=f.querySelector("#a-docother");if(o&&document.activeElement!==o)o.value=parts.filter(x=>!AID_DOCS.includes(x)).join(", ")}
+function docsBind(f){const h=f.elements.docs;if(!h)return;docsSync(f);
+  const write=()=>{const sel=[...f.querySelectorAll("#a-docpick input:checked")].map(c=>c.value);const other=(f.querySelector("#a-docother").value||"").split(",").map(x=>x.trim()).filter(Boolean);
+    h.value=[...sel,...other].join(", ");h.dataset.manual="1";h.dispatchEvent(new Event("input",{bubbles:true}))};
+  f.querySelectorAll("#a-docpick input").forEach(c=>c.addEventListener("change",e=>{e.stopPropagation();
+    if(c.value==="Yoxdur"&&c.checked){f.querySelectorAll("#a-docpick input").forEach(x=>{if(x!==c)x.checked=false});f.querySelector("#a-docother").value=""}
+    else if(c.checked){const y=f.querySelector('#a-docpick input[value="Yoxdur"]');if(y)y.checked=false;}
+    write()}));
+  const o=f.querySelector("#a-docother");o.addEventListener("input",e=>{e.stopPropagation();if(o.value.trim()){const y=f.querySelector('#a-docpick input[value="Yoxdur"]');if(y)y.checked=false}write()})}
+/* Formada avtomatik dəyərlər canlı yenilənir; əl ilə dəyişdirilən xana toxunulmaz qalır */
+function bindAidAuto(f){
+  docsBind(f);
+  f.addEventListener("input",e=>{const n=e.target.name;if(!n)return;
+    if(AID_GF_KEYS.includes(n)){e.target.dataset.manual="1";return}
+    const cur=readAid();const base={...cur};AID_GF_KEYS.forEach(k=>{const el=f.elements[k];if(!el||!el.dataset.manual)base[k]=""});
+    if(aEdit){const r=aid.find(x=>x.id===aEdit);if(r&&r.letterId)base.letterId=r.letterId}if(aDraft&&aDraft.fromLetter)base.fromLetter=aDraft.fromLetter;
+    const a=aidAuto(base);AID_GF_KEYS.forEach(k=>{const el=f.elements[k];if(el&&!el.dataset.manual&&a[k]!==undefined&&el.value!==a[k]){el.value=a[k]}});docsSync(f);
+    if(!aEdit){const fl=aDraft&&aDraft.fromLetter;aDraft=readAid();if(fl)aDraft.fromLetter=fl}})}
+const L_RES_MAP={"Cavablandırılıb":"Müvafiq izahat verilib","Maddi yardım verildi":"Həll olunub","İcraya göndərildi":"Baxılmaq üçün aidiyyəti təşkilatlara göndərilib","Rədd edildi":"Rədd edilib (əsassız sayılıb)","Baxılır":"İcradadır","Məlumat üçün":"Müvafiq izahat verilib"};
+function letAuto(o){
+  const M=memByName(o.name);const st=o.status||"";
+  const fromKind=o.fromKind||(o.name?"Vətəndaş":(o.from?"Təşkilat":""));
+  return{exec:o.exec||(st==="Məlumat üçün"?"Məlumat üçün":"İcra üçün"),gtype:o.gtype||(o.type==="Şikayət"?"Şikayət":"Ərizə"),
+    ansNo:o.ansNo||"",extNo:o.extNo||"",fromKind,aform:o.aform||"İlkin",sameNo:o.sameNo||"",
+    appl:o.appl||(M?(isOut(M)?"Vətəndaş (Üzv olmayan)":"Vətəndaş (Üzv olan)"):(o.name?"Üzvlük müəyyən deyil":"Digər")),
+    gov:o.gov||(fromKind==="Vətəndaş"?"Vətəndaşdan":fromKind==="Təşkilat"?"Digər təşkilatlardan":""),
+    soc:o.soc||"Yoxdur",topic:o.topic||(st==="Maddi yardım verildi"||(o.id&&aid.some(a=>a.letterId===o.id))?"Maddi_yardımın_verilməsi":""),
+    chan:o.chan||"Əlbəəl",deadline:o.deadline||"",extended:o.extended||"Xeyr",extDate:o.extDate||"",
+    executed:o.executed||(st&&st!=="Baxılır"?"Bəli":"Xeyr"),execDate:o.execDate||o.answerDate||"",
+    delayed:o.delayed||"Xeyr",delayReason:o.delayReason||"",executor:o.executor||gfCfg().resp||"",
+    result:o.result||L_RES_MAP[st]||"",redir:o.redir||(st==="İcraya göndərildi"?"Bəli":"Xeyr"),redirOrg:o.redirOrg||"",gnote:o.gnote||""}}
+
+/* --- Link qurucular: {url, miss:[doldurulmamış məcburi sahələr]} --- */
+function gfNeed(m){return(v,l)=>{if(v===""||v===undefined||v===null)m.push(l)}}
+const GF_BUILD={
+  sd(o){const c=gfCfg(),m=[],need=gfNeed(m);
+    need(o.date,"tarix");need(o.cause,"səbəb");need(o.kind,"növ");need(o.detail,"geniş izah");need(o.type,"tip");
+    if(o.type==="Fərdi")need(o.name,"şəxsin A.S.A.");if(o.type==="Qrup"){need(o.org,"təşkilatın adı");need(o.count,"şəxs sayı")}
+    need(o.amount,"dəyər");need(o.phone,"əlaqə nömrəsi");
+    const P=[[787747936,c.kom],[941321339,"Bəli"],[988617397,o.cause],[1238758205,o.kind],[1373277107,o.detail],[591431937,o.type]];
+    if(o.type==="Fərdi")P.push([760711123,o.name]);else P.push([199794161,o.org],[1796061124,o.count]);
+    P.push([1916592443,o.amount],[332334897,c.iqt],[2113315567,c.ray],[140130407,o.town],[594850766,o.village],[1671503112,o.address],
+      [1754570462,o.date],[946154358,o.phone],[1272960173,o.resp||c.resp],[1385621108,o.note]);
+    return{url:gfLink("sd",P),miss:m}},
+  aid(o0){const c=gfCfg(),o={...o0,...aidAuto(o0)},m=[],need=gfNeed(m);
+    need(o.basis,"verilmə əsası");need(o.name,"A.S.A.");need(o.gender,"cins");need(o.birth,"doğum tarixi");need(o.fin,"FİN");
+    need(o.member,"üzvlük");need(o.work,"iş yeri");need(o.pos,"iş yerində vəzifəsi");need(o.appDate,"müraciət tarixi");need(o.appNo,"müraciətin nömrəsi");
+    need(o.reasonType,"səbəb (siyahıdan)");need(o.docs,"əlavə sənədlər");need(o.amount,"məbləğ");need(o.decDate,"qərar tarixi");
+    need(o.date,"ödəniş tarixi");need(o.payMethod,"ödəniş üsulu");need(o.body,"qərarı qəbul edən orqan");
+    const P=[[1939611843,c.kom],[1574752793,c.status],[1620127740,o.basis],[857251659,o.name],[1758916841,o.gender],[499566886,o.birth],
+      [634560310,o.fin],[1737834263,o.member],[1821568140,o.work],[1520630494,o.pos],[501498966,o.hiPos],[8382289,o.appDate],[756085820,o.appNo],
+      [2059320186,o.reasonType],[2024510151,o.reason],[616281675,o.docs],[1874737903,o.amount],[1899185917,GFO.AID_FUND[0]],[654176471,o.decDate],
+      [1723986893,o.date],[471159671,o.payMethod],[564085939,o.body]];
+    return{url:gfLink("aid",P),miss:m}},
+  let(o0){const c=gfCfg(),o={...o0,...letAuto(o0)},m=[],need=gfNeed(m);
+    need(o.date,"daxil olma tarixi");need(o.no,"sənədin №");need(o.exec,"icra xarakteri");need(o.gtype,"formadakı növü");need(o.fromKind,"kimdən daxil olub");
+    if(o.fromKind==="Təşkilat")need(o.from,"təşkilatın adı («Kim tərəfindən»)");
+    if(o.fromKind==="Vətəndaş"){need(o.name,"vətəndaşın A.S.A.");need(o.work,"vətəndaşın iş yeri")}
+    need(o.aform,"müraciətin forması");if(o.aform==="Eyni məzmunlu")need(o.sameNo,"ilkin sənədin №");
+    need(o.appl,"müraciət edən haqqında");need(o.gov,"göndərən orqan");need(o.soc,"sosial status");need(o.topic,"mövzu");need(o.chan,"daxil olduğu kanal");
+    need(o.summary,"qısa məzmun");if(o.delayed==="Bəli")need(o.delayReason,"gecikmənin səbəbi");need(o.executor,"icraçı");need(o.result,"icra nəticəsi");
+    const P=[[1261436718,c.kom],[541207369,"Bəli"],[1836694870,o.date],[1184053138,o.exec],[1796112804,o.no],[1171862990,o.ansNo],[1858809159,o.extNo],
+      [508904544,o.gtype],[895438845,o.fromKind]];
+    if(o.fromKind==="Təşkilat")P.push([959870274,o.from]);else P.push([1805540356,o.name],[1117940643,o.work]);
+    P.push([839151805,o.aform]);if(o.aform==="Eyni məzmunlu")P.push([1870792035,o.sameNo]);
+    P.push([1805195862,o.appl],[1355920833,o.gov],[1968140404,o.soc],[536973363,o.topic],[1803198737,c.iqt],[496982106,c.ray],[1465693307,o.chan],
+      [940296090,o.summary],[1907193013,o.deadline],[1035690461,o.extended]);
+    if(o.extended==="Bəli")P.push([422074987,o.extDate]);
+    P.push([1645583521,o.executed]);if(o.executed==="Bəli")P.push([1845496876,o.execDate]);
+    P.push([238999008,o.delayed]);if(o.delayed==="Bəli")P.push([1878988137,o.delayReason]);
+    P.push([570982102,o.executor],[365151360,o.result],[1694223730,o.redir]);if(o.redir==="Bəli")P.push([1875116610,o.redirOrg]);
+    P.push([576664805,o.gnote]);
+    return{url:gfLink("let",P),miss:m}}};
+
+/* --- Qeydin altındakı «RB formasında aç» paneli --- */
+function gfBar(kind,rec){
+  if(!rec)return`<div class="gf-bar"><span class="mut">Qeydi yadda saxladıqdan sonra onu RB formasında aça biləcəksiniz.</span></div>`;
+  if(gfPend&&gfPend.kind===kind&&gfPend.id===rec.id)return`<div class="gf-bar ask"><b>Forma brauzerdə açıldı.</b> Səhifələri «Далее» ilə keçib yoxlayın, sonda «Отправить» düyməsini basın. Göndərdinizmi?
+    <div class="form-actions" style="margin-top:10px"><button class="btn primary" type="button" data-gf-yes>Bəli, göndərdim</button><button class="btn" type="button" data-gf-open>Formanı yenidən aç</button><button class="btn ghost" type="button" data-gf-no>Hələ yox</button></div><div class="form-msg" data-gf-msg></div></div>`;
+  return`<div class="gf-bar">${rec.gfSent?`<span class="st done">RB formasına göndərilib: ${dmy(rec.gfSent)}</span>`:`<span class="st pend">RB formasına göndərilməyib</span>`}
+    <button class="btn" type="button" data-gf-open>${rec.gfSent?"Formanı yenidən aç":"RB formasında aç"}</button>${rec.gfSent?`<button class="btn ghost" type="button" data-gf-undo>İşarəni götür</button>`:""}<div class="form-msg" data-gf-msg></div></div>`}
+function bindGf(kind,getRec,put,readCur){
+  const root=$("#view");const msg=t=>{const e=root.querySelector("[data-gf-msg]");if(e){e.className="form-msg err";e.textContent=t}};
+  root.querySelector("[data-gf-open]")?.addEventListener("click",()=>{const rec=getRec();if(!rec)return;
+    const cur=readCur(),base=kind==="let"?{...rec,...letAuto(rec)}:kind==="aid"?{...rec,...aidAuto(rec)}:rec;if(Object.keys(cur).some(k=>String(cur[k]??"")!==String(base[k]??""))){msg("Əvvəlcə dəyişiklikləri «Yadda saxla» düyməsi ilə saxlayın, sonra formanı açın.");return}
+    const r=GF_BUILD[kind](rec);if(r.miss.length){msg("RB forması üçün bunları doldurub yadda saxlayın: "+r.miss.join(", ")+".");return}
+    gfOpenUrl(r.url);gfPend={kind,id:rec.id};render()});
+  root.querySelector("[data-gf-yes]")?.addEventListener("click",async()=>{const rec=getRec();gfPend=null;
+    if(rec){try{await put({...rec,gfSent:todayISO()});toast("RB formasına göndərildi kimi işarələndi")}catch(e){toast(errText(e))}}render()});
+  root.querySelector("[data-gf-no]")?.addEventListener("click",()=>{gfPend=null;render()});
+  root.querySelector("[data-gf-undo]")?.addEventListener("click",async()=>{const rec=getRec();if(!rec)return;const r={...rec};delete r.gfSent;
+    try{await put(r);toast("İşarə götürüldü")}catch(e){toast(errText(e))}render()});
+}
+
+/* ---------- Sosial dəstək ---------- */
+let sd=[];let sEdit=null,sConfirm=null,sDraft=null,sAll=false,sq="",sRb="";
+async function putSd(a){licGuard();if(mode==="db"){const{id,...b}=a;await db.collection("sd").doc(id).set(b)}else{const i=sd.findIndex(x=>x.id===a.id);i>=0?sd[i]=a:sd.push(a);lsSet();render()}}
+async function delSd(id){licGuard();if(mode==="db")await db.collection("sd").doc(id).delete();else{sd=sd.filter(x=>x.id!==id);lsSet();render()}}
+const sdWho=x=>x.type==="Fərdi"?(x.name||"—"):(x.org||"—")+(x.count?` · ${x.count} nəfər`:"");
+function sdHTML(){
+  const ed=sEdit&&sd.find(x=>x.id===sEdit);
+  const today=new Date().toISOString().slice(0,10);
+  const o=ed||sDraft||{date:today>=form.start&&today<=form.end?today:form.end,type:"Qrup",cause:"",kind:"",detail:"",name:"",org:"",count:"",amount:"",phone:"",town:"",village:"",address:"",resp:"",note:""};
+  const c=gfCfg();
+  let list=sd.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  if(!sAll)list=list.filter(inPeriod);
+  const all=list;list=list.filter(x=>gfMatch(x,sRb));
+  const qs=sq.trim().toLocaleLowerCase("az");
+  if(qs)list=list.filter(x=>[x.name,x.org,x.kind,x.cause,x.detail,x.phone,money(x.amount),dmy(x.date)].join(" ").toLocaleLowerCase("az").includes(qs));
+  const tot=list.reduce((a,x)=>a+num(x.amount),0),todo=all.filter(x=>!x.gfSent).length;
+  const body=list.length?list.map((x,i)=>`<tr tabindex="0" data-sd="${x.id}" class="${x.id===sEdit?"sel":""} ${inPeriod(x)?"":"out"}">
+      <td class="num">${list.length-i}</td><td>${esc(sdWho(x))}<div class="mut">${dmy(x.date)} · ${esc(x.type||"")}</div></td>
+      <td>${esc(x.kind||"")}<div class="mut">${esc(x.cause||"")}</div></td><td class="num">${money(x.amount)}</td><td>${gfBadge(x)}</td></tr>`).join("")
+    :`<tr><td colspan="5"><div class="empty"><b>${all.length?"Uyğun qeyd yoxdur":"Bu dövrdə sosial dəstək qeydi yoxdur"}</b>${all.length?"":"Soldakı formu doldurub «Əlavə et» düyməsini basın."}</div></td></tr>`;
+  return`<div class="split">
+  <section class="card"><h2>${ed?"Qeydi düzəlt":"Sosial dəstək"}${ed?'<span class="badge">redaktə</span>':""}</h2>
+    <p class="hint">Üzvlərə göstərilən sosial dəstək (maddi yardım xaric): biletlər, ekskursiyalar, hədiyyələr və s. Mümkün qədər qrup şəklində yazın.</p>
+    <form class="entry" id="sentry" novalidate>
+      <div class="row2"><div class="fld"><label for="s-date">Verilmə tarixi *</label><input id="s-date" name="date" type="date" value="${esc(o.date)}"></div>
+        <div class="fld"><label for="s-type">Tipi *</label><select id="s-type" name="type">${gopt(["Qrup","Fərdi"],o.type)}</select></div></div>
+      <div class="fld"><label for="s-cause">Səbəbi *</label><select id="s-cause" name="cause">${gopt(GFO.SD_CAUSE,o.cause,"— seçin —")}</select></div>
+      <div class="fld"><label for="s-kind">Növü *</label><select id="s-kind" name="kind">${gopt(GFO.SD_KIND,o.kind,"— seçin —")}</select></div>
+      <div class="fld"><label for="s-detail">Geniş izah *</label><textarea id="s-detail" name="detail" rows="2" placeholder="Məs.: Teatra 25 bilet, «Leyli və Məcnun» tamaşası">${esc(o.detail)}</textarea></div>
+      <div class="fld" data-show="type=Fərdi"><label for="s-name">Dəstək verilmiş şəxsin A.S.A. *</label><input id="s-name" name="name" list="memList" value="${esc(o.name)}" autocomplete="off"></div>
+      <div class="row2" data-show="type=Qrup"><div class="fld"><label for="s-org">Təşkilat, müəssisə adı *</label><input id="s-org" name="org" list="unitList" value="${esc(o.org)}" autocomplete="off"></div>
+        <div class="fld"><label for="s-count">Şəxs sayı *</label><input id="s-count" name="count" type="number" min="1" step="1" value="${esc(o.count)}"></div></div>
+      <div class="row2"><div class="fld"><label for="s-amount">Dəyəri (AZN) *</label><input id="s-amount" name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(o.amount)}"></div>
+        <div class="fld"><label for="s-phone">Əlaqə nömrəsi *</label><input id="s-phone" name="phone" inputmode="tel" value="${esc(o.phone)}" placeholder="05XXXXXXXX"></div></div>
+      <details class="gf"${o.town||o.village||o.address||o.resp||o.note?" open":""}><summary>Ünvan, cavabdeh şəxs, qeyd (məcburi deyil)</summary>
+        <div class="row2"><div class="fld"><label for="s-town">Qəsəbə</label><input id="s-town" name="town" value="${esc(o.town)}"></div>
+          <div class="fld"><label for="s-village">Kənd</label><input id="s-village" name="village" value="${esc(o.village)}"></div></div>
+        <div class="fld"><label for="s-address">Ünvan (küçə, məhəllə)</label><input id="s-address" name="address" value="${esc(o.address)}"></div>
+        <div class="fld"><label for="s-resp">Cavabdeh şəxs / struktur bölmə</label><input id="s-resp" name="resp" value="${esc(o.resp)}" placeholder="${esc(c.resp||"Parametrlərdəki dəyər")}"></div>
+        <div class="fld"><label for="s-note">Qeyd</label><input id="s-note" name="note" value="${esc(o.note)}"></div></details>
+      <div class="form-msg" id="smsg2"></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${ed?"Yadda saxla":"Əlavə et"}</button>
+        ${ed?`<button class="btn" type="button" id="sCancel">Ləğv et</button><button class="btn ${sConfirm===sEdit?"danger":"ghost"}" type="button" id="sDel">${sConfirm===sEdit?"Silinsin? Təsdiqlə":"Sil"}</button>`:""}</div>
+    </form>${ed?gfBar("sd",ed):""}</section>
+  <section class="card printable" data-ptitle="Sosial dəstək reyestri"><h2>Sosial dəstək reyestri</h2>
+    <div class="reg-tools" style="margin-top:10px"><select id="sScope" aria-label="Dövr"><option value="p"${sAll?"":" selected"}>Seçilmiş dövr</option><option value="a"${sAll?" selected":""}>Bütün dövrlər</option></select>
+      ${gfFilterSel("sRb",sRb)}<input id="sq" class="srch" type="search" placeholder="Axtar: ad, təşkilat, növ…" value="${esc(sq)}" aria-label="Axtar"></div>
+    <div class="sum">${list.length} qeyd · cəmi <b>${money(tot)} AZN</b>${todo?` · <b>${todo}</b> qeyd RB-yə göndərilməyib`:""}</div>
+    <div class="tbl-wrap"><table class="reg"><thead><tr><th class="num">№</th><th>Kimə</th><th>Növ</th><th class="num">Dəyər</th><th>RB</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="mut">Hesabat dövründə heç bir sosial dəstək olmayıbsa: <button class="btn ghost" type="button" id="sNone">RB formasını «Xeyr» cavabı ilə aç</button></p>
+  </section></div>`;
+}
+function readSd(){const fd=new FormData($("#sentry"));const g=k=>(fd.get(k)??"").toString().trim();
+  return{date:g("date"),type:g("type"),cause:g("cause"),kind:g("kind"),detail:g("detail"),name:normName(g("name")),org:normName(g("org")),
+    count:g("count")===""?"":Number(g("count")),amount:g("amount")===""?"":Number(g("amount")),phone:normPhone(g("phone")),
+    town:g("town"),village:g("village"),address:g("address"),resp:g("resp"),note:g("note")}}
+function bindSd(){
+  const f=$("#sentry");gfToggle(f);
+  f.addEventListener("change",e=>{if(e.target.name==="type")gfToggle(f)});
+  f.addEventListener("input",()=>{if(!sEdit)sDraft=readSd()});
+  f.addEventListener("submit",async e=>{e.preventDefault();const o=readSd(),m=$("#smsg2");const miss=[];
+    if(!o.date)miss.push("tarix");if(!o.cause)miss.push("səbəb");if(!o.kind)miss.push("növ");if(!o.detail)miss.push("geniş izah");
+    if(o.type==="Fərdi"&&!o.name)miss.push("şəxsin A.S.A.");if(o.type==="Qrup"){if(!o.org)miss.push("təşkilatın adı");if(o.count==="")miss.push("şəxs sayı")}
+    if(o.amount===""||isNaN(o.amount))miss.push("dəyər");if(!o.phone)miss.push("əlaqə nömrəsi");
+    if(miss.length){m.className="form-msg err";m.textContent="Doldurun: "+miss.join(", ");return}
+    if(o.amount<0){m.className="form-msg err";m.textContent="Dəyər mənfi ola bilməz.";return}
+    if(o.type==="Qrup"&&!(o.count>=1)){m.className="form-msg err";m.textContent="Şəxs sayı 1-dən az ola bilməz.";return}
+    if(!/^0\d{9}$/.test(o.phone)){m.className="form-msg err";m.textContent="Əlaqə nömrəsi 10 rəqəm olmalıdır, məs.: 0551234567.";return}
+    if(o.type==="Fərdi"){o.org="";o.count=""}else o.name="";
+    const prev=sEdit&&sd.find(x=>x.id===sEdit);
+    const rec={...o,id:sEdit||newId(),updatedAt:new Date().toISOString()};if(prev&&prev.gfSent)rec.gfSent=prev.gfSent;
+    try{await putSd(rec);const was=!!sEdit;sEdit=rec.id;sConfirm=null;sDraft=null;
+      toast(!inPeriod(rec)?"Əlavə edildi, amma seçilmiş dövrdən kənardadır":was?"Dəyişiklik yadda saxlandı":"Əlavə edildi. İndi onu RB formasında aça bilərsiniz.");render()}
+    catch(err){m.className="form-msg err";m.textContent=errText(err)}});
+  $("#sCancel")?.addEventListener("click",()=>{sEdit=null;sConfirm=null;render()});
+  $("#sDel")?.addEventListener("click",async()=>{if(sConfirm!==sEdit){sConfirm=sEdit;render();return}
+    try{await delSd(sEdit);sEdit=null;sConfirm=null;toast("Silindi");render()}catch(err){$("#smsg2").className="form-msg err";$("#smsg2").textContent=errText(err)}});
+  $("#sScope").addEventListener("change",e=>{sAll=e.target.value==="a";render()});
+  $("#sRb").addEventListener("change",e=>{sRb=e.target.value;render()});
+  const ss=$("#sq");ss.addEventListener("input",()=>{sq=ss.value;const p=ss.selectionStart;render();const n=$("#sq");n.focus();try{n.setSelectionRange(p,p)}catch(e){}});
+  $("#sNone").addEventListener("click",()=>{if(sd.some(inPeriod)&&!confirm("Bu dövrdə sosial dəstək qeydləri var. Yenə də «Xeyr» cavabı ilə açılsın?"))return;
+    gfOpenUrl(gfLink("sd",[[787747936,gfCfg().kom],[941321339,"Xeyr"]]))});
+  document.querySelectorAll("tr[data-sd]").forEach(t=>{const open=()=>{sEdit=t.dataset.sd;sConfirm=null;gfPend=null;render();if(innerWidth<860)$("#sentry").scrollIntoView({behavior:"smooth"})};
+    t.addEventListener("click",open);t.addEventListener("keydown",e=>{if(e.key==="Enter")open()})});
+  if(sEdit)bindGf("sd",()=>sd.find(x=>x.id===sEdit),putSd,readSd);
+}
+
+/* ---------- Maddi yardım və Ərizələr üçün RB sahələri ---------- */
+function aidGfHTML(o0){const o={...o0,...aidAuto(o0)};const man=k=>o0[k]?' data-manual="1"':"";
+  return`<details class="gf" open><summary>RB «Maddi yardım reyestri» üçün</summary>
+    <div class="row2"><div class="fld"><label for="a-basis">Verilmə əsası</label><select id="a-basis" name="basis"${man("basis")}>${gopt(GFO.AID_BASIS,o.basis,"— seçin —")}</select></div>
+      <div class="fld"><label for="a-rtype">Səbəb (siyahıdan)</label><select id="a-rtype" name="reasonType"${man("reasonType")}>${gopt(GFO.AID_REASON,o.reasonType,"— seçin —")}</select></div></div>
+    <div class="row2"><div class="fld"><label for="a-fin">FİN</label><input id="a-fin" name="fin"${man("fin")} value="${esc(o.fin)}" maxlength="7" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.08em"></div>
+      <div class="fld"><label for="a-birth">Doğum tarixi</label><input id="a-birth" name="birth"${man("birth")} type="date" value="${esc(o.birth)}"></div></div>
+    <div class="row2"><div class="fld"><label for="a-gender">Cinsi</label><select id="a-gender" name="gender"${man("gender")}>${gopt(["Kişi","Qadın"],o.gender,"—")}</select></div>
+      <div class="fld"><label for="a-member">Üzvlüyü</label><select id="a-member" name="member"${man("member")}>${gopt(["Üzvdür","Üzv deyil"],o.member,"—")}</select></div></div>
+    <div class="fld"><label for="a-pos">İş yerində vəzifəsi</label><input id="a-pos" name="pos"${man("pos")} value="${esc(o.pos)}"></div>
+    <div class="fld"><label for="a-hipos">Həmkarlar İttifaqında vəzifəsi (varsa)</label><input id="a-hipos" name="hiPos"${man("hiPos")} value="${esc(o.hiPos)}"></div>
+    <div class="row2"><div class="fld"><label for="a-appdate">Müraciət tarixi</label><input id="a-appdate" name="appDate"${man("appDate")} type="date" value="${esc(o.appDate)}"></div>
+      <div class="fld"><label for="a-appno">Müraciətin №</label><input id="a-appno" name="appNo"${man("appNo")} value="${esc(o.appNo)}"></div></div>
+    <div class="fld"><label>Müraciətə əlavə olunan sənədlər</label><input type="hidden" id="a-docs" name="docs"${man("docs")} value="${esc(o.docs)}">
+      <div class="doc-picks" id="a-docpick">${AID_DOCS.map(x=>`<label class="doc-pick"><input type="checkbox" value="${esc(x)}"><span>${esc(x)}</span></label>`).join("")}</div>
+      <input id="a-docother" class="doc-other" placeholder="Digər sənəd (yazın)" aria-label="Digər sənəd"></div>
+    <div class="row2"><div class="fld"><label for="a-decdate">Qərar tarixi</label><input id="a-decdate" name="decDate"${man("decDate")} type="date" value="${esc(o.decDate)}"></div>
+      <div class="fld"><label for="a-paym">Ödəniş üsulu</label><select id="a-paym" name="payMethod"${man("payMethod")}>${gopt(GFO.AID_PAY,o.payMethod,"— seçin —")}</select></div></div>
+    <div class="fld"><label for="a-body">Qərarı qəbul edən orqan</label><select id="a-body" name="body"${man("body")}>${gopt(GFO.AID_BODY,o.body,"— seçin —")}</select></div>
+  </details>`}
+const AID_GF_KEYS=["basis","reasonType","fin","birth","gender","member","pos","hiPos","appDate","appNo","docs","decDate","payMethod","body"];
+const LET_GF_KEYS=["exec","gtype","extNo","ansNo","fromKind","aform","sameNo","appl","gov","soc","chan","topic","deadline","extended","extDate","executed","execDate","delayed","delayReason","executor","result","redir","redirOrg","gnote"];
+const readKeys=(fd,keys)=>Object.fromEntries(keys.map(k=>[k,(fd.get(k)??"").toString().trim()]));
+
+/* ---------- İşdən azad edilmiş Hİ üzvləri (Uçot kartı → «Üzvlükdən xaric») ---------- */
+const AZ_URL="e/1FAIpQLSeJHKps7modyhTLjH1mvA6WjceiKTI2RVYU_nvOWkFNdEzvGg";
+const AZO={"EDU": ["Orta", "Orta ixtisas", "Ali", "Bakalavr", "Magistr", "Doktorantura", "Digər"], "ATT": ["Razılıq verilmiş", "İmtina edilmiş"], "ART": ["68.2 a", "68.2 b", "68.2 c", "68.2 ç", "68.2 d", "68.2 e", "69.3", "69.3 -1", "69.6", "70.a", "70.b", "70.c", "70.ç", "70.d", "70.e", "73.1", "73.2", "74.1 a", "74.1 b", "74.1 c", "74.1 ç", "74.1 d", "74.1 e", "74.1 ə", "74.1 f", "75.2 b", "75.2 c", "75.2 ç", "75.2 d"], "REASON": ["İşəgötürən tərəfindən", "İşçi tərəfindən", "əmək müqaviləsinin müddətinin qurtarması;", "işçilərin sayı və ya ştatları ixtisar edildikdə", "İşçi çalışmanın yaş həddinə çatdıqda", "Digər"]};
+
+GF_URL.az=AZ_URL;
+const AZ_FLAGS=[["azDis","Əlillik statusu",360181523],["azMartyr","Şəhid ailəsi statusu",1670277439],["azVet","Veteran statusu",808841329],["azPoor","Aztəminatlı ailə",952171479],["azWarDis","Müharibə əlilliyi",1539225008],["azUdsy","Ünvanlı dövlət sosial yardımı alır",773772041],["azPension","Yaşa görə pensiya və ya müavinət",651370814]];
+const AZ_KEYS=["azGender","azEdu","azOrg","azPos","azAppeal","azAppealDate","azAtt","azArt","azReason",...AZ_FLAGS.map(f=>f[0])];
+/* «Vəfat» və ya yalnız üzvlükdən çıxma işdən azad olma deyil — RB formasına getmir */
+const azApplies=m=>isOut(m)&&!/vəfat|üzvlüyündən öz ərizəsi/i.test(m.exitBasis||"");
+function eduLevel(t){const s=String(t||"").toLocaleLowerCase("az");if(!s)return"";
+  if(/doktorant|fəlsəfə doktoru|elmlər doktoru/.test(s))return"Doktorantura";if(/magistr/.test(s))return"Magistr";if(/bakalavr/.test(s))return"Bakalavr";
+  if(/orta[ -]ixtisas|texnikum|kollec/.test(s))return"Orta ixtisas";if(/\bali\b|universitet|institut|akademiya/.test(s))return"Ali";if(/\borta\b/.test(s))return"Orta";return""}
+function azAuto(o){const b=o.exitBasis||"";const m70=b.match(/maddə 70, «(a|b|c|ç)»/);
+  const reason=/maddə 70, «b»/.test(b)?"işçilərin sayı və ya ştatları ixtisar edildikdə":/maddə 70/.test(b)?"İşəgötürən tərəfindən":/maddə 69/.test(b)?"İşçi tərəfindən":/maddə 73/.test(b)?"əmək müqaviləsinin müddətinin qurtarması;":/maddə 74/.test(b)?"Digər":"";
+  const r={azGender:o.azGender||genderOf(o.name),azEdu:o.azEdu||eduLevel(o.edu),azOrg:o.azOrg||o.unit||"",azPos:o.azPos||o.pos||"",
+    azAppeal:o.azAppeal||(/maddə 70/.test(b)?"":"Yoxdur"),azAppealDate:o.azAppealDate||"",azAtt:o.azAtt||"",
+    azArt:o.azArt||(m70?"70."+m70[1]:""),azReason:o.azReason||reason};
+  AZ_FLAGS.forEach(([k])=>r[k]=o[k]||"Xeyr");return r}
+GF_BUILD.az=function(o0){const c=gfCfg(),o={...o0,...azAuto(o0)},m=[],need=gfNeed(m);
+  need(o.name,"A.S.A.");need(o.birth,"doğum tarixi (Təvəllüdü)");need(o.azEdu,"təhsil səviyyəsi");need(o.azOrg,"işlədiyi təşkilat");need(o.azPos,"vəzifəsi");
+  need(o.azAppeal,"işəgötürənin müraciəti (Var/Yoxdur)");if(o.azAppeal==="Var")need(o.azAtt,"həmkarlar ittifaqının münasibəti");
+  need(o.exitDate,"işdən azad olma tarixi");need(o.azArt,"ƏM maddəsi (siyahıdan)");need(o.azReason,"xitam səbəbi");
+  const P=[[1485710170,c.kom],[2106465526,"Bəli"],[1074532478,o.name],[569713268,o.azGender],[820653553,o.birth],[943420655,o.azEdu],
+    [1857317640,o.azOrg],[2977097,o.azPos],[446763160,o.azAppeal]];
+  if(o.azAppeal==="Var")P.push([1533832989,o.azAppealDate],[1704551029,o.azAtt]);
+  P.push([1217131807,o.exitDate],[1077147940,o.azArt],[1854375669,o.azReason]);
+  AZ_FLAGS.forEach(([k,,e])=>P.push([e,o[k]]));
+  return{url:gfLink("az",P),miss:m}};
+function azGfHTML(o0){const o={...o0,...azAuto(o0)};
+  return`<details class="gf" open data-show="status=Üzvlükdən xaric"><summary>RB «İşdən azad edilmiş üzvlər» üçün</summary>
+    <p class="mut" style="margin:0">Vəfat və ya yalnız üzvlükdən çıxma hallarında RB formasına göndərilmir.</p>
+    <div class="row2"><div class="fld"><label for="m-azGender">Cinsi</label><select id="m-azGender" name="azGender">${gopt(["Kişi","Qadın"],o.azGender,"—")}</select></div>
+      <div class="fld"><label for="m-azEdu">Təhsil səviyyəsi</label><select id="m-azEdu" name="azEdu">${gopt(AZO.EDU,o.azEdu,"— seçin —")}</select></div></div>
+    <div class="fld"><label for="m-azOrg">İşlədiyi müəssisə / təşkilat</label><input id="m-azOrg" name="azOrg" list="unitList" value="${esc(o.azOrg)}"></div>
+    <div class="fld"><label for="m-azPos">Vəzifəsi</label><input id="m-azPos" name="azPos" value="${esc(o.azPos)}"></div>
+    <div class="fld"><label for="m-azArt">ƏM maddəsi</label><select id="m-azArt" name="azArt">${gopt(AZO.ART,o.azArt,"— seçin —")}</select></div>
+    <div class="fld"><label for="m-azReason">Xitam səbəbi</label><select id="m-azReason" name="azReason">${gopt(AZO.REASON,o.azReason,"— seçin —")}</select></div>
+    <div class="fld"><label for="m-azAppeal">İşəgötürənin həmkarlar ittifaqına müraciəti</label><select id="m-azAppeal" name="azAppeal">${gopt(["Var","Yoxdur"],o.azAppeal,"— seçin —")}</select></div>
+    <div class="row2" data-show="azAppeal=Var"><div class="fld"><label for="m-azAppealDate">Müraciətin tarixi</label><input id="m-azAppealDate" name="azAppealDate" type="date" value="${esc(o.azAppealDate)}"></div>
+      <div class="fld"><label for="m-azAtt">Hİ-nin münasibəti</label><select id="m-azAtt" name="azAtt">${gopt(AZO.ATT,o.azAtt,"— seçin —")}</select></div></div>
+    <div class="fld"><label>Sosial status</label><div class="az-flags">${AZ_FLAGS.map(([k,l])=>`<label class="az-flag"><span>${esc(l)}</span><select name="${k}" aria-label="${esc(l)}">${gopt(YN,o[k])}</select></label>`).join("")}</div></div>
+  </details>`}
+
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num=v=>Number(v)||0;
+const money=n=>num(n).toLocaleString("az-Latn-AZ",{minimumFractionDigits:2,maximumFractionDigits:2});
+const moneyZ=n=>num(n)===0?"":money(n);
+const dmy=d=>{if(!d)return"";const[y,m,dd]=d.split("-");return`${dd}.${m}.${y}`};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2400)}
+function yearSuffix(y){const d=y%10,t=Math.floor(y/10)%10;
+  if(d===0)return["-cu","-cu","-ci","-cu","-cı","-ci","-cı","-ci","-ci","-cu"][t];
+  return["","-ci","-ci","-cü","-cü","-ci","-cı","-ci","-ci","-cu"][d]}
+function periodText(){const s=new Date(form.start),e=new Date(form.end);if(isNaN(s)||isNaN(e))return"";
+  return `${s.getFullYear()}${yearSuffix(s.getFullYear())} il  ${MONTHS[s.getMonth()]}- ${MONTHS[e.getMonth()].toLocaleLowerCase("az")}`}
+
+/* ---------- storage ---------- */
+const LSK="hi2_data";
+const lsGet=()=>{try{if(window.api)return window.api.load();return JSON.parse(localStorage.getItem(LSK)||"null")}catch(e){return null}};
+const lsSet=()=>{try{const j=JSON.stringify({form,ops,aid,letters,bk,mem,sd});if(window.api){if(!window.api.save(j))toast("Yadda saxlamaq alınmadı!")}else localStorage.setItem(LSK,j)}catch(e){}};
+const newId=()=>"o"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+async function putOp(o){licGuard();if(mode==="db"){const{id,...b}=o;await db.collection("ops").doc(id).set(b)}else{const i=ops.findIndex(x=>x.id===o.id);i>=0?ops[i]=o:ops.push(o);lsSet();render()}}
+async function delOp(id){licGuard();if(mode==="db")await db.collection("ops").doc(id).delete();else{ops=ops.filter(x=>x.id!==id);lsSet();render()}}
+async function putAid(a){licGuard();if(mode==="db"){const{id,...b}=a;await db.collection("aid").doc(id).set(b)}else{const i=aid.findIndex(x=>x.id===a.id);i>=0?aid[i]=a:aid.push(a);lsSet();render()}}
+async function putBk(a){licGuard();if(mode==="db"){const{id,...b}=a;await db.collection("bk").doc(id).set(b)}else{const i=bk.findIndex(x=>x.id===a.id);i>=0?bk[i]=a:bk.push(a);lsSet();render()}}
+async function delBk(id){licGuard();if(mode==="db")await db.collection("bk").doc(id).delete();else{bk=bk.filter(x=>x.id!==id);lsSet();render()}}
+async function delAid(id){licGuard();if(mode==="db")await db.collection("aid").doc(id).delete();else{aid=aid.filter(x=>x.id!==id);lsSet();render()}}
+async function putLetter(a){licGuard();if(mode==="db"){const{id,...b}=a;await db.collection("letters").doc(id).set(b)}else{const i=letters.findIndex(x=>x.id===a.id);i>=0?letters[i]=a:letters.push(a);lsSet();render()}}
+async function delLetter(id){licGuard();if(mode==="db")await db.collection("letters").doc(id).delete();else{letters=letters.filter(x=>x.id!==id);lsSet();render()}}
+async function putForm(){if(licBlocked()){render();return}if(mode==="db")await db.doc("form/main").set(JSON.parse(JSON.stringify(form)));else{lsSet();render()}}
+function errText(e){const c=e&&e.code;if(c==="license")return licMsg();
+  if(c==="permission_denied"||c==="not_granted")return"Bu səhifəyə yazmaq icazəniz yoxdur. Sahibdən redaktə icazəsi istəyin.";
+  if(c==="quota_exceeded")return"Yaddaş limiti dolub. Köhnə əməliyyatları silin.";
+  return"Yadda saxlamaq alınmadı. İnternet bağlantısını yoxlayıb yenidən cəhd edin."}
+
+async function boot(){
+  render();await licLoad();licGate();
+  try{db=window.claude?.use?await window.claude.use("db"):null}catch(e){db=null}
+  if(db){mode="db";
+    db.collection("ops").onSnapshot(s=>{ops=s.docs.map(d=>({id:d.id,...d.data()}));loaded=true;render()},()=>notice("Məlumat bazası ilə əlaqə kəsildi. Səhifəni yeniləyin."));
+    db.collection("letters").onSnapshot(s=>{letters=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+    db.collection("mem").onSnapshot(s=>{mem=s.docs.map(d=>({id:d.id,...d.data()}));memVer++;render()},()=>{});
+    db.collection("bk").onSnapshot(s=>{bk=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+    db.collection("sd").onSnapshot(s=>{sd=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+    db.collection("aid").onSnapshot(s=>{aid=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+    db.doc("form/main").onSnapshot(s=>{if(s.exists){const d=s.data();form={...form,...d,rb:{...form.rb,...(d.rb||{})},bal:{...form.bal,...(d.bal||{})},plan:{...(d.plan||{})}}}render()});
+  }else{mode="local";loaded=true;const d=lsGet();if(d){form={...form,...d.form};ops=d.ops||[];aid=d.aid||[];letters=d.letters||[];bk=d.bk||[];mem=d.mem||[];sd=d.sd||[];memVer++}
+    if(!window.api)notice("Məlumatlar yalnız bu brauzerdə saxlanılır.");render()}
+}
+function notice(t){const n=$("#notice");n.textContent=t;n.hidden=false}
+
+/* ---------- computation (mirrors the Excel form) ---------- */
+const inPeriod=o=>o.date>=form.start&&o.date<=form.end;
+function compute(){
+  const P=ops.filter(inPeriod);
+  const fact={},people={},days={};
+  for(const o of P){fact[o.code]=(fact[o.code]||0)+num(o.amount);people[o.code]=(people[o.code]||0)+num(o.people);days[o.code]=(days[o.code]||0)+num(o.days)}
+  const AP=aid.filter(inPeriod);
+  fact["2.4.1"]=(fact["2.4.1"]||0)+AP.reduce((a,x)=>a+num(x.amount),0);people["2.4.1"]=(people["2.4.1"]||0)+AP.length;
+  for(const o of bk.filter(inPeriod)){const c=BK_MAIN(o.code);if(!c)continue;fact[c]=(fact[c]||0)+num(o.amount);people[c]=(people[c]||0)+num(o.people);days[c]=(days[c]||0)+num(o.days)}
+  const b=form.bal,plan=form.plan;
+  const C11=num(b.c12)+num(b.c13)+num(b.c14),D11=num(b.d12)+num(b.d13)+num(b.d14);
+  const pv=c=>num(plan[c]),fv=c=>c==="1.9"?D11:num(fact[c]);
+  const sumP=c=>isParent(c)?childrenOf(c).reduce((a,r)=>a+sumP(r.code),0):pv(c);
+  const sumF=c=>isParent(c)?childrenOf(c).reduce((a,r)=>a+sumF(r.code),0):fv(c);
+  const incCodes=ROWS.filter(r=>/^1\.\d+$/.test(r.code)).map(r=>r.code);
+  const C27=incCodes.reduce((a,c)=>a+pv(c),0),D27=incCodes.reduce((a,c)=>a+fv(c),0);
+  const C74=EXP_SECTIONS.reduce((a,r)=>a+sumP(r.code),0),D74=EXP_SECTIONS.reduce((a,r)=>a+sumF(r.code),0);
+  return{P,AP,fact,people,days,C11,D11,pv,fv,sumP,sumF,C27,D27,C74,D74,C75:C11+C27-C74,D75:D27-D74};
+}
+function label(c,R){
+  if(c==="2.1.2")return`${NAME[c]} _${num(R.people[c])}_ nəfər _${num(R.days[c])}_ gün`;
+  if(c==="2.4.1")return`${NAME[c]} (_${num(R.people[c])}_nəfər)`;
+  return NAME[c];
+}
+
+/* ---------- render ---------- */
+function renderHeader(){
+  $("#hdrOrg").textContent=form.org||"Təşkilatın adını «Parametrlər»də yazın";
+  const y=(form.start||"").slice(0,4)||Y0;
+  const pres=[["I Rüb",`${y}-01-01`,`${y}-03-31`],["II Rüb",`${y}-04-01`,`${y}-06-30`],["III Rüb",`${y}-07-01`,`${y}-09-30`],["IV Rüb",`${y}-10-01`,`${y}-12-31`],["İllik",`${y}-01-01`,`${y}-12-31`]];
+  $("#periods").innerHTML=`<span class="lbl">Dövr</span>${pres.map(([l,s,e])=>`<button class="pchip" data-s="${s}" data-e="${e}" aria-pressed="${form.start===s&&form.end===e}">${l}</button>`).join("")}<span class="pnow">${dmy(form.start)} – ${dmy(form.end)}</span>`;
+  const items=[["report","Hesabat"],["ops","Əməliyyatlar"],["aid","Maddi yardım"],["sd","Sosial dəstək"],["bk","Biznes kart"],["mem","Uçot kartı"],["plan","Plan"],["settings","Parametrlər"]];
+  const n=ops.filter(inPeriod).length;
+  $("#tabs").innerHTML=items.map(([k,l])=>`<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab===k}">${l}${k==="ops"?`<span class="n">${n}</span>`:k==="aid"?`<span class="n">${aid.filter(inPeriod).length}</span>`:k==="sd"?`<span class="n">${sd.filter(inPeriod).length}</span>`:k==="mem"&&mem.length?`<span class="n" title="Üzvlər">${mem.filter(m=>m.status!=="Üzvlükdən xaric").length}</span>`:k==="letters"&&letters.some(x=>x.status==="Baxılır")?`<span class="n" title="Baxılır">${letters.filter(x=>x.status==="Baxılır").length}</span>`:""}</button>`).join("");
+}
+function render(){
+  document.documentElement.dataset.sec=tab;renderHeader();refreshMemLists();
+  const v=$("#view");
+  if(!loaded){v.innerHTML=`<div class="empty"><b>Məlumatlar yüklənir…</b></div>`;return}
+  if(tab==="report")v.innerHTML=reportHTML();
+  else if(tab==="ops"){v.innerHTML=opsHTML();bindOps()}
+  else if(tab==="aid"){v.innerHTML=aidHTML();bindAid()}
+  else if(tab==="sd"){v.innerHTML=sdHTML();bindSd()}
+  else if(tab==="bk"){v.innerHTML=bkHTML();bindBk()}
+  else if(tab==="mem"){v.innerHTML=memHTML();bindMem()}
+  else if(tab==="plan"){v.innerHTML=planHTML();bindPlan()}
+  else{v.innerHTML=settingsHTML();bindSettings()}
+  addPrintBtns();
+}
+/* ---------- «Çap et» ---------- */
+const PRINT_ICON=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>`;
+if(!window.api)document.documentElement.classList.add("web");
+function addPrintBtns(){
+  document.querySelectorAll("#view .printable").forEach(s=>{if(s.querySelector(":scope>.print-btn"))return;
+    const b=document.createElement("button");b.type="button";b.className="print-btn";b.title="Bu bölməni çap et";b.innerHTML=PRINT_ICON+"Çap et";s.prepend(b)});
+}
+/* Hesabatı bir A4 səhifəyə sığdır: kompakt cədvəl + lazım olsa miqyas */
+const A4W=703,A4H=1010;/* 210×297 mm, 12 mm kənarlar, px ilə */
+const COMPACT=p=>`${p}{padding:0!important;border:0!important;box-shadow:none!important;max-width:none!important;margin:0!important;font-size:11px;line-height:1.25}
+${p} .sheet-head{font-size:11.5px;margin-bottom:6px;gap:1px 10px}
+${p} .tno{margin:6px 0 1px;font-size:10px}
+${p} .sec-title{font-size:12.5px;margin:0 0 2px}
+${p} .tbl-wrap{overflow:visible;margin-top:6px!important}
+${p} table.rep{font-size:10px}
+${p} table.rep th{font-size:8.5px;padding:2px 5px}
+${p} table.rep td{padding:1.5px 5px;line-height:1.2}
+${p} table.rep td.code{font-size:9.5px;width:38px}
+${p} table.rep td.name{min-width:0}
+${p} table.rep tr.lv2 td.name{padding-left:14px}
+${p} .foot{margin-top:12px}
+${p} .foot .ln{width:120px}
+${p} .seal{width:56px;height:56px;font-size:11px}`;
+document.head.insertAdjacentHTML("beforeend",`<style>${COMPACT(".fit-measure .sheet")}
+@media print{${COMPACT("body.printing .print-target.sheet")}
+body.printing .print-target.sheet{zoom:var(--pz,1);width:var(--pw,auto)}
+body.printing .print-target.sheet tr{break-inside:auto}}</style>`);
+function fitSheet(s){
+  const box=document.createElement("div");box.className="fit-measure";
+  box.style.cssText=`position:absolute;left:-20000px;top:0;width:${A4W}px;visibility:hidden`;
+  const c=s.cloneNode(true);c.querySelectorAll(".print-btn").forEach(x=>x.remove());box.append(c);document.body.append(box);
+  const h=c.scrollHeight;box.remove();
+  const z=Math.min(1,A4H/h);
+  s.style.setProperty("--pz",z.toFixed(4));s.style.setProperty("--pw",(A4W/z).toFixed(1)+"px");
+}
+function endPrint(){document.body.classList.remove("printing");document.querySelectorAll(".print-target").forEach(x=>x.classList.remove("print-target"));document.querySelectorAll(".print-head").forEach(x=>x.remove())}
+function printSection(s){
+  endPrint();
+  if(!s.classList.contains("sheet")){
+    const h=document.createElement("div");h.className="print-head";
+    h.innerHTML=`<b>${esc(form.org||"")}</b>${form.org?"<br>":""}Dövr: ${dmy(form.start)} – ${dmy(form.end)} · Çap tarixi: ${dmy(new Date().toISOString().slice(0,10))}`;
+    s.querySelector(":scope>h2")?.after(h)}
+  if(s.classList.contains("sheet"))fitSheet(s);
+  s.classList.add("print-target");document.body.classList.add("printing");
+  const t=document.title,title=(s.dataset.ptitle||"Hesabat")+(form.org?" — "+form.org:"");document.title=title;
+  if(window.api&&window.api.printPreview){
+    window.api.printPreview(title).catch(()=>toast("Çap faylı hazırlanmadı")).finally(()=>{document.title=t;endPrint()});return}
+  try{window.print()}finally{document.title=t}
+}
+/* Menyu: Fayl → Çap et (Ctrl+P) — açıq bölmənin ilk çap olunan hissəsi */
+if(window.api&&window.api.onMenuPrint)window.api.onMenuPrint(()=>{const s=document.querySelector("#view .printable");if(s)printSection(s);else toast("Bu bölmədə çap üçün hesabat yoxdur")});
+window.addEventListener("afterprint",()=>setTimeout(endPrint,100));
+/* Menyudan (Ctrl+P) çap ediləndə də Hesabat bir səhifəyə sığsın */
+window.addEventListener("beforeprint",()=>{if(document.body.classList.contains("printing"))return;const s=document.querySelector("#view .sheet");if(!s)return;fitSheet(s);s.classList.add("print-target");document.body.classList.add("printing")});
+$("#view").addEventListener("click",e=>{const b=e.target.closest(".print-btn");if(!b)return;e.stopPropagation();const s=b.closest(".printable");if(s)printSection(s)});
+function tr(cls,code,name,p,f,opt={}){
+  const zp=num(p)===0,zf=num(f)===0,over=opt.over&&num(f)>num(p)&&num(p)>0;
+  return`<tr class="${cls}"><td class="code">${esc(code)}</td><td class="name">${esc(name)}</td><td class="${zp?"z":""}">${opt.showZero?money(p):moneyZ(p)}</td><td class="${zf?"z":""}${over?" over":""}" ${over?'title="Plandan artıq"':""}>${opt.showZero?money(f):moneyZ(f)}</td></tr>`}
+function reportHTML(){
+  const R=compute(),rb=form.rb,b=form.bal;
+  const pct=(f,p)=>p>0?Math.min(100,f/p*100):0;
+  let h=`<div class="kpis">
+    <div class="kpi"><div class="l">Gəlirlər (fakt)</div><div class="v">${money(R.D27)}</div><div class="s">plan ${money(R.C27)}</div><div class="bar"><i style="width:${pct(R.D27,R.C27)}%"></i></div></div>
+    <div class="kpi"><div class="l">Xərclər (fakt)</div><div class="v">${money(R.D74)}</div><div class="s">plan ${money(R.C74)}</div><div class="bar"><i style="width:${pct(R.D74,R.C74)}%"></i></div></div>
+    <div class="kpi"><div class="l">Əməliyyatlar</div><div class="v">${R.P.length}</div><div class="s">seçilmiş dövrdə</div></div>
+    <div class="kpi bal"><div class="l">Büdcə vəsaiti qalığı</div><div class="v">${money(R.D75)}</div><div class="s">AZN, fakt</div></div></div>
+  <article class="sheet printable" data-ptitle="Gəlir və xərclər hesabatı">
+    <dl class="sheet-head"><dt>Təşkilatın adı:</dt><dd>${esc(form.org||"—")}</dd><dt>Dövr:</dt><dd>${esc(periodText())}</dd></dl>
+    <div class="tno">Cədvəl №1</div>
+    <div class="tbl-wrap"><table class="rep"><thead><tr><th class="l" colspan="2">Göstəricilər</th><th>${dmy(form.start)}</th><th>${dmy(form.end)}</th></tr></thead><tbody>
+      ${tr("","","RB-nın borcu",rb.c6,rb.d6,{showZero:1})}${tr("","","RK-nın RB-nə borcu",rb.c7,rb.d7,{showZero:1})}</tbody></table></div>
+    <div class="tno">Cədvəl №2</div>
+    <h3 class="sec-title">2. Gəlir və Xərclər</h3>
+    <div class="tbl-wrap"><table class="rep"><thead><tr><th class="l" colspan="2">Maddələrin adı</th><th>Plan</th><th>Fakt</th></tr></thead><tbody>
+      ${tr("grp","","İlin əvvəlinə büdcə vəsaiti qalığı",R.C11,R.D11,{showZero:1})}
+      ${tr("lv2","","Bank hesabı qalığı",b.c12,b.d12)}${tr("lv2","","Biznes kart qalığı",b.c13,b.d13)}${tr("lv2","","Kassa qalığı",b.c14,b.d14)}
+    </tbody></table></div>
+    <div class="tbl-wrap" style="margin-top:14px"><table class="rep"><thead><tr><th class="l">Kod</th><th class="l">Gəlirlərin mənbələri</th><th>Plan</th><th>Fakt</th></tr></thead><tbody>
+      <tr class="head"><td class="code">1</td><td class="name" colspan="3">Gəlirlər</td></tr>
+      ${ROWS.filter(r=>/^1\.\d+$/.test(r.code)).map(r=>tr("",r.code,r.name,R.pv(r.code),R.fv(r.code))).join("")}
+      ${tr("tot","","Cəmi gəlirlər",R.C27,R.D27,{showZero:1})}
+    </tbody></table></div>
+    <div class="tbl-wrap" style="margin-top:14px"><table class="rep"><thead><tr><th class="l">Kod</th><th class="l">Xərclərin istiqamətləri</th><th>Plan</th><th>Fakt</th></tr></thead><tbody>
+      <tr class="head"><td class="code">2</td><td class="name" colspan="3">Xərclər</td></tr>
+      ${EXP_SECTIONS.map(s=>{
+        const kids=childrenOf(s.code);
+        if(!kids.length)return tr("grp",s.code,s.name,R.pv(s.code),R.fv(s.code),{over:1});
+        return tr("grp",s.code,s.name,R.sumP(s.code),R.sumF(s.code),{showZero:1})+kids.map(k=>tr("lv2",k.code,label(k.code,R),R.pv(k.code),R.fv(k.code),{over:1})).join("")}).join("")}
+      ${tr("tot","","Cəmi xərclər",R.C74,R.D74,{showZero:1})}
+      ${tr("tot","","Büdcə vəsaiti qalığı:",R.C75,R.D75,{showZero:1})}
+    </tbody></table></div>
+    <div class="foot"><div class="sig">İmza: <span class="ln"></span> ${esc(form.chair||"")}</div><div class="seal" aria-label="Möhür yeri">M.Y</div></div>
+  </article>`;
+  return h;
+}
+
+function codeOptions(sel){const hide=c=>c==="2.4.1"&&sel!=="2.4.1";
+  let h=`<optgroup label="1. Gəlirlər">${INC.map(r=>`<option value="${r.code}"${r.code===sel?" selected":""}>${r.code} ${esc(r.name)}</option>`).join("")}</optgroup>`;
+  for(const s of EXP_SECTIONS){
+    const kids=childrenOf(s.code);const list=kids.length?kids:[s];
+    h+=`<optgroup label="${esc(s.code+" "+s.name)}">${list.filter(r=>!hide(r.code)).map(r=>`<option value="${r.code}"${r.code===sel?" selected":""}>${r.code} ${esc(r.name)}</option>`).join("")}</optgroup>`}
+  return h}
+function opsHTML(){
+  const ed=editId&&ops.find(o=>o.id===editId);
+  const today=new Date().toISOString().slice(0,10);
+  const o=ed||draft||{date:today>=form.start&&today<=form.end?today:form.end,code:"1.1",amount:"",desc:"",people:"",days:"",org:""};
+  const showPD=["2.1.2","2.4.1"].includes(o.code);
+  let list=ops.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  if(fsec==="period")list=list.filter(inPeriod);
+  else if(fsec)list=list.filter(x=>x.code===fsec||x.code.startsWith(fsec+"."));
+  if(q){const s=q.toLocaleLowerCase("az");list=list.filter(x=>[x.desc,x.org,x.doc,x.code,NAME[x.code]].join(" ").toLocaleLowerCase("az").includes(s))}
+  const inc=list.filter(x=>x.code.startsWith("1.")).reduce((a,x)=>a+num(x.amount),0),exp=list.filter(x=>x.code.startsWith("2")).reduce((a,x)=>a+num(x.amount),0);
+  const body=list.length?list.map(x=>`<tr tabindex="0" data-id="${x.id}" class="${x.id===editId?"sel":""} ${inPeriod(x)?"":"out"}">
+      <td class="num">${dmy(x.date)}</td>
+      <td><span class="code-chip ${x.code.startsWith("1")?"in":"ex"}">${esc(x.code)}</span>${esc(NAME[x.code]||"")}${x.desc||x.org?`<div class="mut">${[x.org,x.desc].filter(Boolean).map(esc).join(" · ")}</div>`:""}</td>
+      <td class="num">${x.code.startsWith("1")?"+":"−"}${money(x.amount)}${x.code.startsWith("1")?`<div class="p40" title="Məbləğin 40%-i">40%: ${money(Math.round(num(x.amount)*40)/100)}</div>`:""}</td></tr>`).join("")
+    :`<tr><td colspan="3"><div class="empty"><b>${q||fsec?"Uyğun əməliyyat yoxdur":"Hələ əməliyyat yoxdur"}</b>${q||fsec?"":"Soldakı formu doldurub «Əlavə et» düyməsini basın."}</div></td></tr>`;
+  return`<div class="split">
+  <section class="card"><h2>${ed?"Əməliyyatı düzəlt":"Yeni əməliyyat"}${ed?'<span class="badge">redaktə</span>':""}</h2>
+    <p class="hint">Fakt sütunu bu əməliyyatlardan hesablanır. Maddi yardımı (2.4.1) «Maddi yardım» bölməsinə yazın.</p>
+    <form class="entry" id="entry" novalidate>
+      <div class="row2"><div class="fld"><label for="f-date">Tarix *</label><input id="f-date" name="date" type="date" value="${esc(o.date)}" required></div>
+      <div class="fld"><label for="f-amount">Məbləğ (AZN) *</label><input id="f-amount" name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(o.amount)}" required></div></div>
+      <div class="fld"><label for="f-code">Maddə *</label><select id="f-code" name="code">${codeOptions(o.code)}</select></div>
+      <div class="fld"><label for="f-desc">Təsvir / əsas</label><input id="f-desc" name="desc" value="${esc(o.desc)}" placeholder="Məs.: Novruz tədbiri, 3 nəfərə yardım"></div>
+      <div class="row3" ${showPD?"":"hidden"}><div class="fld"><label for="f-people">Nəfər</label><input id="f-people" name="people" type="number" min="0" step="1" value="${esc(o.people)}"></div>
+        <div class="fld" ${o.code==="2.1.2"?"":"hidden"}><label for="f-days">Gün</label><input id="f-days" name="days" type="number" min="0" step="1" value="${esc(o.days)}"></div></div>
+      <div class="fld"><label for="f-org">Hansı təşkilatdan</label><input id="f-org" name="org" list="orgList" autocomplete="off" value="${esc(o.org)}" placeholder="Məs.: Neft-kimya fakültəsi">
+        <datalist id="orgList">${[...new Set(ops.map(x=>String(x.org||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"az")).map(v=>`<option value="${esc(v)}">`).join("")}</datalist></div>
+      ${showPD?`<div class="mut">Nəfər${o.code==="2.1.2"?" və gün":""} formadakı sətir adına yazılır.</div>`:""}
+      <div class="form-msg" id="fmsg"></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${ed?"Yadda saxla":"Əlavə et"}</button>
+        ${ed?`<button class="btn" type="button" id="cancelEdit">Ləğv et</button><button class="btn ${confirmDel===editId?"danger":"ghost"}" type="button" id="delBtn">${confirmDel===editId?"Silinsin? Təsdiqlə":"Sil"}</button>`:""}</div>
+    </form></section>
+  <section class="card printable" data-ptitle="Əməliyyatlar reyestri"><h2>Əməliyyatlar reyestri</h2>
+    <div class="reg-tools" style="margin-top:10px"><select id="fsec" aria-label="Bölmə"><option value="">Bütün dövrlər, bütün maddələr</option><option value="period"${fsec==="period"?" selected":""}>Yalnız seçilmiş dövr</option><option value="1"${fsec==="1"?" selected":""}>1 Gəlirlər</option>${EXP_SECTIONS.map(s=>`<option value="${s.code}"${fsec===s.code?" selected":""}>${esc(s.code+" "+s.name)}</option>`).join("")}</select>
+      <input id="q" type="search" placeholder="Axtar…" value="${esc(q)}" aria-label="Axtar"></div>
+    <div class="sum">${list.length} əməliyyat · gəlir <b>${money(inc)}</b>${inc?` <span class="p40">(40%: ${money(Math.round(inc*40)/100)})</span>`:""} · xərc <b>${money(exp)}</b> AZN</div>
+    <div class="tbl-wrap"><table class="reg"><thead><tr><th class="num">Tarix</th><th>Maddə</th><th class="num">Məbləğ</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="mut">Seçilmiş dövrdən kənar əməliyyatlar solğun göstərilir. Düzəltmək üçün sətrə toxunun.</p>
+  </section></div>`;
+}
+function readOp(){const fd=new FormData($("#entry"));const g=k=>(fd.get(k)??"").toString().trim();
+  return{date:g("date"),code:g("code"),amount:g("amount")===""?"":Number(g("amount")),desc:g("desc"),people:g("people")===""?"":Number(g("people")),days:g("days")===""?"":Number(g("days")),org:g("org").replace(/\s+/g," ")}}
+function bindOps(){
+  const f=$("#entry");
+  f.addEventListener("input",e=>{const o=readOp();if(editId){const i=ops.findIndex(x=>x.id===editId);if(e.target.name==="code"){const orig=ops[i];ops[i]={...orig,...o};render();ops[i]=orig;return}}else{draft=o;if(e.target.name==="code")render()}});
+  f.addEventListener("submit",async e=>{e.preventDefault();const o=readOp(),m=$("#fmsg");
+    const miss=[];if(!o.date)miss.push("tarix");if(o.amount===""||isNaN(o.amount))miss.push("məbləğ");
+    if(miss.length){m.className="form-msg err";m.textContent="Doldurun: "+miss.join(", ");return}
+    if(o.amount<=0){m.className="form-msg err";m.textContent="Məbləğ sıfırdan böyük olmalıdır.";return}
+    if(!["2.1.2","2.4.1"].includes(o.code)){o.people="";o.days=""}
+    const rec={...o,id:editId||newId(),updatedAt:new Date().toISOString()};{const pv=editId&&ops.find(x=>x.id===editId);if(pv&&pv.doc)rec.doc=pv.doc}
+    try{await putOp(rec);const was=!!editId;editId=null;confirmDel=null;draft=null;toast(was?"Dəyişiklik yadda saxlandı":"Əməliyyat əlavə edildi");
+      if(!inPeriod(rec))toast("Əlavə edildi, amma seçilmiş dövrdən kənardadır");render()}
+    catch(err){m.className="form-msg err";m.textContent=errText(err)}});
+  $("#cancelEdit")?.addEventListener("click",()=>{editId=null;confirmDel=null;render()});
+  $("#delBtn")?.addEventListener("click",async()=>{if(confirmDel!==editId){confirmDel=editId;render();return}
+    try{await delOp(editId);editId=null;confirmDel=null;toast("Əməliyyat silindi");render()}catch(err){$("#fmsg").className="form-msg err";$("#fmsg").textContent=errText(err)}});
+  $("#fsec").addEventListener("change",e=>{fsec=e.target.value;render()});
+  const s=$("#q");s.addEventListener("input",()=>{q=s.value;const p=s.selectionStart;render();const n=$("#q");n.focus();try{n.setSelectionRange(p,p)}catch(e){}});
+  document.querySelectorAll("tr[data-id]").forEach(t=>{const open=()=>{editId=t.dataset.id;confirmDel=null;render();if(innerWidth<860)$("#entry").scrollIntoView({behavior:"smooth"})};
+    t.addEventListener("click",open);t.addEventListener("keydown",e=>{if(e.key==="Enter")open()})});
+}
+
+
+/* ---------- Maddi yardım (2.4.1) recipients ---------- */
+const normAcc=v=>String(v||"").toUpperCase().replace(/[\s-]/g,"");
+function accKind(a){if(/^AZ\d{2}[A-Z]{4}[A-Z0-9]{20}$/.test(a))return"IBAN";if(/^\d{10,34}$/.test(a))return"Bank hesab";return""}
+const maskAcc=a=>a?(a.length>8?a.slice(0,4)+" •••• "+a.slice(-4):a):"";
+const fmtAcc=a=>a.replace(/(.{4})/g,"$1 ").trim();
+function aidHTML(){
+  const ed=aEdit&&aid.find(x=>x.id===aEdit);
+  const today=new Date().toISOString().slice(0,10);
+  const o=ed||aDraft||{date:today>=form.start&&today<=form.end?today:form.end,name:"",account:"",amount:"",reason:"",work:""};
+  const R=compute();
+  let list=aid.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(a.name||"").localeCompare(b.name||"","az"));
+  if(!aAll)list=list.filter(inPeriod);
+  const all=list,allTot=all.reduce((a,x)=>a+num(x.amount),0);
+  const aqs=aq.trim().toLocaleLowerCase("az");
+  if(aqs)list=list.filter(x=>[x.name,x.account,fmtAcc(normAcc(x.account)),x.work,x.reason,money(x.amount),dmy(x.date)].join(" ").toLocaleLowerCase("az").includes(aqs));
+  list=list.filter(x=>gfMatch(x,aRb));
+  const tot=list.reduce((a,x)=>a+num(x.amount),0);
+  const legacy=ops.filter(x=>x.code==="2.4.1"&&inPeriod(x));
+  const k=accKind(normAcc(o.account));
+  const body=list.length?list.map((x,i)=>`<tr tabindex="0" data-aid="${x.id}" class="${x.id===aEdit?"sel":""} ${inPeriod(x)?"":"out"}">
+      <td class="num">${list.length-i}</td><td>${esc(x.name)}<div class="mut">${dmy(x.date)}${x.reason?" · "+esc(x.reason):""}</div><div>${gfBadge(x)}</div></td>
+      <td class="num">${money(x.amount)}</td><td>${esc(x.work||"")}</td></tr>`).join("")
+    :aqs&&all.length?`<tr><td colspan="4"><div class="empty"><b>Heç nə tapılmadı</b>«${esc(aq.trim())}» üzrə qeyd yoxdur.</div></td></tr>`:`<tr><td colspan="4"><div class="empty"><b>Bu dövrdə maddi yardım qeydi yoxdur</b>Soldakı formu doldurub «Əlavə et» düyməsini basın.</div></td></tr>`;
+  return`<div class="split">
+  <div class="col"><section class="card"><h2>${ed?"Qeydi düzəlt":"Maddi yardım alan"}${ed?'<span class="badge">redaktə</span>':""}</h2>
+    <p class="hint">Hər alan ayrıca yazılır. 2.4.1 sətrinin məbləği və nəfər sayı bu siyahıdan hesablanır.</p>
+    ${(()=>{const lid=(ed&&ed.letterId)||(aDraft&&aDraft.fromLetter);const L=lid&&allLetters().find(x=>x.id===lid);return L?`<p class="mut" style="margin:-6px 0 12px">Əsas: ${esc(L.type||"Ərizə")} № ${esc(L.no||"—")}, ${dmy(L.date)}</p>`:""})()}
+    <form class="entry" id="aentry" novalidate>
+      <div class="fld"><label for="a-name">Soyadı, adı, ata adı *</label><input id="a-name" name="name" list="memList" value="${esc(o.name)}" autocomplete="off" placeholder="Məs.: Məmmədov Əli Həsən oğlu"></div>
+      <div class="row2"><div class="fld"><label for="a-amount">Məbləğ (AZN) *</label><input id="a-amount" name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(o.amount)}"></div>
+        <div class="fld"><label for="a-date">Ödəniş tarixi *</label><input id="a-date" name="date" type="date" value="${esc(o.date)}"></div></div>
+      <div class="fld"><label for="a-reason">Səbəb (geniş)</label><input id="a-reason" name="reason" value="${esc(o.reason)}" placeholder="Məs.: müalicə, toy, vəfat"></div>
+      <div class="fld"><label for="a-work">İş yeri</label><input id="a-work" name="work" list="unitList" value="${esc(o.work)}" placeholder="Məs.: Neft-kimya fakültəsi"></div>
+      ${aidGfHTML(o)}
+      <div class="form-msg" id="amsg"></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${ed?"Yadda saxla":"Əlavə et"}</button>
+        ${ed?`<button class="btn" type="button" id="aCancel">Ləğv et</button><button class="btn ${aConfirm===aEdit?"danger":"ghost"}" type="button" id="aDel">${aConfirm===aEdit?"Silinsin? Təsdiqlə":"Sil"}</button>`:""}</div>
+    </form>${ed?gfBar("aid",ed):""}</section>${orgHTML(all,allTot)}</div>
+  <section class="card printable" data-ptitle="Maddi yardım alanların siyahısı"><h2>Maddi yardım siyahısı</h2>
+    <div class="reg-tools" style="margin-top:10px"><select id="aScope" aria-label="Dövr"><option value="p"${aAll?"":" selected"}>Seçilmiş dövr</option><option value="a"${aAll?" selected":""}>Bütün dövrlər</option></select>
+      <button class="btn" type="button" id="aCopy">Siyahını kopyala</button>${gfFilterSel("aRb",aRb)}
+      <input id="aq" class="srch" type="search" placeholder="Axtar: ad, iş yeri, səbəb…" value="${esc(aq)}" aria-label="Axtar"></div>
+    <div class="sum">${aqs?`Axtarış: ${all.length} qeyddən `:""}${list.length} nəfər · cəmi <b>${money(tot)} AZN</b>${legacy.length?` · üstəgəl «Əməliyyatlar»dakı 2.4.1 yekunu ${money(legacy.reduce((a,x)=>a+num(x.amount),0))} AZN`:""}</div>
+    <div class="tbl-wrap"><table class="reg"><thead><tr><th class="num">№</th><th>S.A.A.</th><th class="num">Məbləğ</th><th>İş yeri</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="mut">«Siyahını kopyala» №, S.A.A., məbləğ və iş yerini cədvəl kimi kopyalayır.</p>
+    <textarea id="aCopyBox" class="fld" style="width:100%;min-height:90px;font:13px monospace" hidden readonly aria-label="Kopyalanan siyahı"></textarea>
+  </section></div>`;
+}
+/* İş yerləri üzrə bölgü — groups the visible aid list by workplace */
+function orgHTML(list,tot){
+  const g=new Map();
+  list.forEach(x=>{const raw=String(x.work||"").replace(/\s+/g," ").trim();const key=raw.toLocaleLowerCase("az");
+    const e=g.get(key)||{name:raw,sum:0,n:0,v:{}};e.sum+=num(x.amount);e.n++;e.v[raw]=(e.v[raw]||0)+1;g.set(key,e)});
+  g.forEach(e=>{e.name=Object.keys(e.v).sort((a,b)=>e.v[b]-e.v[a]||(b[0]!==b[0].toLocaleLowerCase("az"))-(a[0]!==a[0].toLocaleLowerCase("az")))[0]});
+  const rows=[...g.values()].sort((a,b)=>b.sum-a.sum||a.name.localeCompare(b.name,"az"));
+  const head=`<h2>İş yerləri üzrə bölgü</h2><p class="hint" style="margin-bottom:4px">${aAll?"Bütün dövrlər":"Seçilmiş dövr"} üzrə maddi yardımın təşkilatlara görə paylanması.</p>`;
+  if(!rows.length)return`<section class="card org-card">${head}<div class="empty"><b>Hələ bölgü yoxdur</b>Qeyd əlavə etdikdə hər iş yerinə ayrılan məbləğ burada görünəcək.</div></section>`;
+  const max=rows[0].sum||1,named=rows.filter(r=>r.name).length;
+  const col=i=>`var(--c${i<6?i+1:7})`;
+  const pct=v=>tot?(v/tot*100):0;
+  const pf=v=>{const p=pct(v);return(p>0&&p<1?"<1":p.toFixed(p<10?1:0).replace(".",","))+"%"};
+  const strip=rows.map((r,i)=>`<i style="flex:${r.sum||0.0001} 1 0;background:${col(i)}" title="${esc(r.name||"Göstərilməyib")}: ${money(r.sum)} AZN (${pf(r.sum)})"></i>`).join("");
+  const items=rows.map((r,i)=>`<li class="org-row${r.name?"":" none"}">
+      <div class="nm"><i class="dot" style="background:${col(i)}"></i><span title="${esc(r.name)}">${r.name?esc(r.name):"İş yeri göstərilməyib"}</span></div>
+      <div class="pc">${pf(r.sum)}</div>
+      <div class="trk"><i style="width:${Math.max(r.sum/max*100,1.5).toFixed(2)}%;background:${col(i)}"></i></div>
+      <div class="sub"><b>${money(r.sum)} AZN</b> · ${r.n} nəfər${r.n>1?` · orta ${money(r.sum/r.n)}`:""}</div></li>`).join("");
+  return`<section class="card org-card printable" data-ptitle="İş yerləri üzrə bölgü">${head}
+    <div class="org-top"><div class="big">${money(tot)}<small>AZN</small></div>
+      <div class="meta"><div><b>${named}</b>təşkilat</div><div><b>${list.length}</b>nəfər</div><div><b>${money(tot/list.length)}</b>orta, AZN</div></div></div>
+    <div class="org-strip" role="img" aria-label="Təşkilatlar üzrə payların zolağı">${strip}</div>
+    <ul class="org-list">${items}</ul></section>`;
+}
+function readAid(){const fd=new FormData($("#aentry"));const g=k=>(fd.get(k)??"").toString().trim();
+  const x=readKeys(fd,AID_GF_KEYS);x.fin=normFin(x.fin);
+  return{date:g("date"),name:g("name").replace(/\s+/g," "),amount:g("amount")===""?"":Number(g("amount")),reason:g("reason"),work:g("work"),...x}}
+function bindAid(){
+  const f=$("#aentry");bindAidAuto(f);
+  $("#a-name").addEventListener("input",e=>{const m=memByName(e.target.value);if(m&&m.unit){$("#a-work").value=m.unit;if(!aEdit&&aDraft)aDraft.work=m.unit}
+    const set=(id,v)=>{const el=$(id);if(el&&v&&!el.value)el.value=v};
+    if(m){set("#a-fin",m.fin);set("#a-birth",m.birth);set("#a-pos",m.pos);set("#a-member",isOut(m)?"Üzv deyil":"Üzvdür")}
+    set("#a-gender",genderOf(e.target.value));if(!aEdit){const fl=aDraft&&aDraft.fromLetter;aDraft=readAid();if(fl)aDraft.fromLetter=fl}});
+  f.addEventListener("input",e=>{if(!aEdit){const fl=aDraft&&aDraft.fromLetter;aDraft=readAid();if(fl)aDraft.fromLetter=fl}if(e.target.name==="account"){const t=e.target,p=t.selectionStart,b=t.value.slice(0,p).replace(/[\s-]/g,"").length;t.value=t.value.replace(/[\s-]/g,"");try{t.setSelectionRange(b,b)}catch(x){}if(aDraft)aDraft.account=normAcc(t.value);const a=normAcc(t.value),k=accKind(a);$("#a-kind").textContent=a?(k?k+" nömrəsi":"Hesab nömrəsi yalnız rəqəmlərdən ibarət olmalıdır. Yenə də yadda saxlamaq olar."):"Bankdakı hesab nömrəsi (yalnız rəqəmlər, boşluqsuz) və ya IBAN"}});
+  f.addEventListener("submit",async e=>{e.preventDefault();const o=readAid(),m=$("#amsg");const miss=[];
+    if(!o.name)miss.push("S.A.A.");if(o.amount===""||isNaN(o.amount))miss.push("məbləğ");if(!o.date)miss.push("tarix");
+    if(miss.length){m.className="form-msg err";m.textContent="Doldurun: "+miss.join(", ");return}
+    if(o.amount<=0){m.className="form-msg err";m.textContent="Məbləğ sıfırdan böyük olmalıdır.";return}
+    if(o.fin&&!/^[0-9A-Z]{7}$/.test(o.fin)){m.className="form-msg err";m.textContent="FİN 7 hərf və rəqəmdən ibarət olmalıdır.";return}
+
+    const fromL=aDraft&&aDraft.fromLetter;
+    const prev=aEdit&&aid.find(x=>x.id===aEdit);
+    const rec={...(prev&&prev.account?{account:prev.account}:{}),...o,id:aEdit||newId(),updatedAt:new Date().toISOString()};
+    if(prev&&prev.letterId){rec.letterId=prev.letterId;rec.letterNo=prev.letterNo||""}if(prev&&prev.gfSent)rec.gfSent=prev.gfSent;
+    if(fromL){const L=letters.find(x=>x.id===fromL);if(L){rec.letterId=L.id;rec.letterNo=L.no||""}}
+    try{await putAid(rec);
+      if(fromL){const L=letters.find(x=>x.id===fromL);if(L&&L.status!=="Maddi yardım verildi"){try{await putLetter({...L,status:"Maddi yardım verildi",answerDate:L.answerDate||rec.date})}catch(e){}}}const was=!!aEdit;aEdit=rec.id;aConfirm=null;aDraft=null;toast(!inPeriod(rec)?"Əlavə edildi, amma seçilmiş dövrdən kənardadır":was?"Dəyişiklik yadda saxlandı":"Əlavə edildi. İndi onu RB formasında aça bilərsiniz.");render()}
+    catch(err){m.className="form-msg err";m.textContent=errText(err)}});
+  $("#aCancel")?.addEventListener("click",()=>{aEdit=null;aConfirm=null;render()});
+  if(aEdit)bindGf("aid",()=>aid.find(x=>x.id===aEdit),putAid,readAid);
+  $("#aDel")?.addEventListener("click",async()=>{if(aConfirm!==aEdit){aConfirm=aEdit;render();return}
+    try{await delAid(aEdit);aEdit=null;aConfirm=null;toast("Silindi");render()}catch(err){$("#amsg").className="form-msg err";$("#amsg").textContent=errText(err)}});
+  $("#aScope").addEventListener("change",e=>{aAll=e.target.value==="a";render()});
+  $("#aRb").addEventListener("change",e=>{aRb=e.target.value;render()});
+  const as=$("#aq");as.addEventListener("input",()=>{aq=as.value;const p=as.selectionStart;render();const n=$("#aq");n.focus();try{n.setSelectionRange(p,p)}catch(e){}});
+  $("#aCopy").addEventListener("click",async()=>{
+    const aqs=aq.trim().toLocaleLowerCase("az");
+    const list=aid.filter(x=>(aAll||inPeriod(x))&&(!aqs||[x.name,x.account,fmtAcc(normAcc(x.account)),x.work,x.reason,money(x.amount),dmy(x.date)].join(" ").toLocaleLowerCase("az").includes(aqs))).sort((a,b)=>(a.name||"").localeCompare(b.name||"","az"));
+    const txt=list.map((x,i)=>[i+1,x.name,num(x.amount).toFixed(2),x.work||""].join("\t")).join("\n");
+    if(!txt){toast("Siyahı boşdur");return}
+    try{await navigator.clipboard.writeText(txt);toast(`${list.length} sətir kopyalandı`)}
+    catch(e){const b=$("#aCopyBox");b.hidden=false;b.value=txt;b.focus();b.select();toast("Mətni seçdim, kopyalayın")}});
+  document.querySelectorAll("tr[data-aid]").forEach(t=>{const open=()=>{aEdit=t.dataset.aid;aConfirm=null;gfPend=null;render();if(innerWidth<860)$("#aentry").scrollIntoView({behavior:"smooth"})};
+    t.addEventListener("click",open);t.addEventListener("keydown",e=>{if(e.key==="Enter")open()})});
+}
+
+
+
+/* ---------- Biznes kart (ayrıca hesabat) ---------- */
+const BK_IN=[["bk_bank","Bank hesabından daxilolmalar"],["bk_hi","Digər həmkarlar ittifaqlarından daxilolmalar"]];
+const BK_EX=["2.1.3","2.1.2","2.3.2","2.4.3","2.6.1","2.6.3","2.6.9","2.7.2","2.11"].map(c=>[c,c==="2.6.3"?"Bank xidməti":NAME[c]]);
+/* Biznes kartdan əsas hesabata: xərclər eyni koda, digər HİT-lərdən daxilolma 1.7-yə; bankdan karta köçürmə daxili köçürmədir, gəlir sayılmır */
+const BK_MAIN=c=>c==="bk_bank"?null:c==="bk_hi"?"1.7":c;
+const BK_NAME=Object.fromEntries([...BK_IN,...BK_EX]);
+const bkIsIn=c=>c.startsWith("bk_");
+function bkCompute(){
+  const P=bk.filter(inPeriod),sum={},people={},days={};
+  for(const o of P){sum[o.code]=(sum[o.code]||0)+num(o.amount);people[o.code]=(people[o.code]||0)+num(o.people);days[o.code]=(days[o.code]||0)+num(o.days)}
+  const open=num(form.bal.d13);
+  const tin=open+BK_IN.reduce((a,[c])=>a+num(sum[c]),0),tex=BK_EX.reduce((a,[c])=>a+num(sum[c]),0);
+  return{P,sum,people,days,open,tin,tex,bal:tin-tex};
+}
+const bkLabel=(c,R)=>c==="2.1.2"?`${NAME[c]} _${num(R.people[c])}_ nəfər _${num(R.days[c])}_ gün`:BK_NAME[c];
+function bkRow(cls,no,name,v,showZero){return`<tr class="${cls}"><td class="code">${esc(no)}</td><td class="name">${esc(name)}</td><td class="${num(v)===0?"z":""}">${showZero?money(v):moneyZ(v)}</td></tr>`}
+function bkSheetHTML(R){
+  return`<article class="sheet printable" data-ptitle="Biznes kart hesabatı">
+    <dl class="sheet-head"><dt>Təşkilatın adı:</dt><dd>${esc(form.org||"—")}</dd><dt>Dövr:</dt><dd>${esc(periodText())}</dd></dl>
+    <h3 class="sec-title">Biznes kart üzrə hesabat</h3>
+    <div class="tbl-wrap"><table class="rep"><thead><tr><th class="l">№</th><th class="l">Maddələrin adı</th><th>Məbləğ (AZN)</th></tr></thead><tbody>
+      <tr class="head"><td class="code">1</td><td class="name" colspan="2">Daxilolmalar</td></tr>
+      ${bkRow("lv2","1.1","İlin əvvəlinə Biznes kart qalığı",R.open,1)}
+      ${BK_IN.map(([c,n],i)=>bkRow("lv2","1."+(i+2),n,R.sum[c])).join("")}
+      ${bkRow("tot","","Cəmi daxilolmalar",R.tin,1)}
+      <tr class="head"><td class="code">2</td><td class="name" colspan="2">Xərclər</td></tr>
+      ${BK_EX.map(([c],i)=>bkRow("lv2","2."+(i+1),bkLabel(c,R),R.sum[c])).join("")}
+      ${bkRow("tot","","Cəmi xərclər",R.tex,1)}
+      ${bkRow("tot","","Büdcə vəsaiti qalığı:",R.bal,1)}
+    </tbody></table></div>
+    <div class="foot"><div class="sig">İmza: <span class="ln"></span> ${esc(form.chair||"")}</div><div class="seal" aria-label="Möhür yeri">M.Y</div></div>
+  </article>`}
+function bkHTML(){
+  const R=bkCompute(),ed=bkEdit&&bk.find(x=>x.id===bkEdit);
+  const today=new Date().toISOString().slice(0,10);
+  const o=ed||bkDraft||{date:today>=form.start&&today<=form.end?today:form.end,code:"bk_bank",amount:"",desc:"",people:"",days:""};
+  const opt=([c,n])=>`<option value="${c}"${c===o.code?" selected":""}>${esc(n)}</option>`;
+  const list=R.P.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const body=list.length?list.map(x=>`<tr tabindex="0" data-bk="${x.id}" class="${x.id===bkEdit?"sel":""}"><td class="num">${dmy(x.date)}</td>
+      <td><span class="code-chip ${bkIsIn(x.code)?"in":"ex"}">${bkIsIn(x.code)?"Daxil":"Xərc"}</span>${esc(BK_NAME[x.code]||"")}${x.desc?`<div class="mut">${esc(x.desc)}</div>`:""}</td>
+      <td class="num">${bkIsIn(x.code)?"+":"−"}${money(x.amount)}</td></tr>`).join("")
+    :`<tr><td colspan="3"><div class="empty"><b>Bu dövrdə biznes kart əməliyyatı yoxdur</b>Soldakı formu doldurub «Əlavə et» düyməsini basın.</div></td></tr>`;
+  return`<div class="split">
+  <section class="card"><h2>${ed?"Qeydi düzəlt":"Biznes kart əməliyyatı"}${ed?'<span class="badge">redaktə</span>':""}</h2>
+    <p class="hint">İlin əvvəlinə qalıq «Parametrlər» bölməsindəki «Biznes kart · fakt» xanasından götürülür. Xərclər və digər HİT-lərdən daxilolmalar əsas «Hesabat»a da avtomatik yazılır; bankdan karta köçürmə yazılmır.</p>
+    <form class="entry" id="bcentry" novalidate>
+      <div class="row2"><div class="fld"><label for="bc-date">Tarix *</label><input id="bc-date" name="date" type="date" value="${esc(o.date)}"></div>
+        <div class="fld"><label for="bc-amount">Məbləğ (AZN) *</label><input id="bc-amount" name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(o.amount)}"></div></div>
+      <div class="fld"><label for="bc-code">Maddə *</label><select id="bc-code" name="code"><optgroup label="1. Daxilolmalar">${BK_IN.map(opt).join("")}</optgroup><optgroup label="2. Xərclər">${BK_EX.map(opt).join("")}</optgroup></select></div>
+      <div class="row2" ${o.code==="2.1.2"?"":"hidden"}><div class="fld"><label for="bc-people">Nəfər</label><input id="bc-people" name="people" type="number" min="0" step="1" value="${esc(o.people)}"></div>
+        <div class="fld"><label for="bc-days">Gün</label><input id="bc-days" name="days" type="number" min="0" step="1" value="${esc(o.days)}"></div></div>
+      <div class="fld"><label for="bc-desc">Təsvir / əsas</label><input id="bc-desc" name="desc" value="${esc(o.desc)}" placeholder="Məs.: dəftərxana malları alındı"></div>
+      <div class="form-msg" id="bcmsg"></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${ed?"Yadda saxla":"Əlavə et"}</button>
+        ${ed?`<button class="btn" type="button" id="bcCancel">Ləğv et</button><button class="btn ${bkConfirm===bkEdit?"danger":"ghost"}" type="button" id="bcDel">${bkConfirm===bkEdit?"Silinsin? Təsdiqlə":"Sil"}</button>`:""}</div>
+    </form></section>
+  <div class="col">${bkSheetHTML(R)}
+  <section class="card printable" data-ptitle="Biznes kart əməliyyatları"><h2>Biznes kart əməliyyatları</h2>
+    <div class="sum">${list.length} əməliyyat · daxilolma <b>${money(R.tin-R.open)}</b> · xərc <b>${money(R.tex)}</b> AZN</div>
+    <div class="tbl-wrap"><table class="reg"><thead><tr><th class="num">Tarix</th><th>Maddə</th><th class="num">Məbləğ</th></tr></thead><tbody>${body}</tbody></table></div>
+    <p class="mut">Seçilmiş dövrün əməliyyatları göstərilir. Düzəltmək üçün sətrə toxunun.</p></section></div></div>`;
+}
+function readBk(){const fd=new FormData($("#bcentry"));const g=k=>(fd.get(k)??"").toString().trim();
+  return{date:g("date"),code:g("code"),amount:g("amount")===""?"":Number(g("amount")),desc:g("desc"),people:g("people")===""?"":Number(g("people")),days:g("days")===""?"":Number(g("days"))}}
+function bindBk(){
+  const f=$("#bcentry");
+  f.addEventListener("input",e=>{if(!bkEdit){bkDraft=readBk();if(e.target.name==="code")render()}else if(e.target.name==="code"){const i=bk.findIndex(x=>x.id===bkEdit),orig=bk[i];bk[i]={...orig,...readBk()};render();bk[i]=orig}});
+  f.addEventListener("submit",async e=>{e.preventDefault();const o=readBk(),m=$("#bcmsg");const miss=[];
+    if(!o.date)miss.push("tarix");if(o.amount===""||isNaN(o.amount))miss.push("məbləğ");
+    if(miss.length){m.className="form-msg err";m.textContent="Doldurun: "+miss.join(", ");return}
+    if(o.amount<=0){m.className="form-msg err";m.textContent="Məbləğ sıfırdan böyük olmalıdır.";return}
+    if(o.code!=="2.1.2"){o.people="";o.days=""}
+    const rec={...o,id:bkEdit||newId(),updatedAt:new Date().toISOString()};
+    try{await putBk(rec);const was=!!bkEdit;bkEdit=null;bkConfirm=null;bkDraft=null;toast(!inPeriod(rec)?"Əlavə edildi, amma seçilmiş dövrdən kənardadır":was?"Dəyişiklik yadda saxlandı":"Əlavə edildi");render()}
+    catch(err){m.className="form-msg err";m.textContent=errText(err)}});
+  $("#bcCancel")?.addEventListener("click",()=>{bkEdit=null;bkConfirm=null;render()});
+  $("#bcDel")?.addEventListener("click",async()=>{if(bkConfirm!==bkEdit){bkConfirm=bkEdit;render();return}
+    try{await delBk(bkEdit);bkEdit=null;bkConfirm=null;toast("Silindi");render()}catch(err){$("#bcmsg").className="form-msg err";$("#bcmsg").textContent=errText(err)}});
+  document.querySelectorAll("tr[data-bk]").forEach(t=>{const open=()=>{bkEdit=t.dataset.bk;bkConfirm=null;render();if(innerWidth<860)$("#bcentry").scrollIntoView({behavior:"smooth"})};
+    t.addEventListener("click",open);t.addEventListener("keydown",e=>{if(e.key==="Enter")open()})});
+}
+
+
+/* ---------- Uçot kartı (üzvlərin qeydiyyatı) ---------- */
+const EXIT_BASIS=[
+  "Əmək Məcəlləsi, maddə 69 — işçinin təşəbbüsü ilə (öz ərizəsi)",
+  "Əmək Məcəlləsi, maddə 70 — işəgötürənin təşəbbüsü ilə",
+  "Əmək Məcəlləsi, maddə 70, «a» bəndi — müəssisənin ləğvi",
+  "Əmək Məcəlləsi, maddə 70, «b» bəndi — işçilərin sayının və ya ştatın ixtisarı",
+  "Əmək Məcəlləsi, maddə 70, «c» bəndi — peşə hazırlığının vəzifəyə uyğun olmaması",
+  "Əmək Məcəlləsi, maddə 70, «ç» bəndi — əmək vəzifələrinin yerinə yetirilməməsi / kobud pozulması",
+  "Əmək Məcəlləsi, maddə 73 — əmək müqaviləsinin müddətinin bitməsi",
+  "Əmək Məcəlləsi, maddə 74 — tərəflərin iradəsindən asılı olmayan hallar",
+  "Həmkarlar ittifaqı üzvlüyündən öz ərizəsi ilə çıxma",
+  "Vəfat"];
+const MSTAT=["Üzv","Üzvlükdən xaric"];
+const normName=v=>String(v||"").replace(/\s+/g," ").trim();
+const memKey=m=>normFin(m.fin)+"|"+normName(m.name).toLocaleLowerCase("az");
+const isOut=m=>m.status==="Üzvlükdən xaric";
+let memVer=0,memListVer=-1;
+function memByName(n){const k=normName(n).toLocaleLowerCase("az");if(!k)return null;
+  const L=mem.filter(m=>normName(m.name).toLocaleLowerCase("az")===k);return L.find(m=>!isOut(m))||L[0]||null}
+function refreshMemLists(){
+  if(memListVer===memVer&&document.getElementById("memList"))return;memListVer=memVer;
+  let box=document.getElementById("memLists");if(!box){box=document.createElement("div");box.id="memLists";box.hidden=true;document.body.append(box)}
+  const units=[...new Set(mem.map(m=>m.unit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"az"));
+  box.innerHTML=`<datalist id="memList">${mem.slice().sort((a,b)=>normName(a.name).localeCompare(normName(b.name),"az")).map(m=>`<option value="${esc(normName(m.name))}" label="${esc((isOut(m)?"Xaric · ":"")+[m.unit,m.pos].filter(Boolean).join(" · "))}">`).join("")}</datalist>
+    <datalist id="unitList">${units.map(u=>`<option value="${esc(u)}">`).join("")}</datalist>
+    <datalist id="basisList">${EXIT_BASIS.map(b=>`<option value="${esc(b)}">`).join("")}</datalist>`;
+}
+async function putMem(m){licGuard();if(mode==="db"){const{id,...b}=m;await db.collection("mem").doc(id).set(b)}else{const i=mem.findIndex(x=>x.id===m.id);i>=0?mem[i]=m:mem.push(m);memVer++;lsSet();render()}}
+async function delMem(id){licGuard();if(mode==="db")await db.collection("mem").doc(id).delete();else{mem=mem.filter(x=>x.id!==id);memVer++;lsSet();render()}}
+
+/* Excel tarixi: rəqəm (Excel tarixi) və ya mətn (GG.AA.İİİİ; ay 12-dən böyükdürsə AA.GG.İİİİ kimi oxunur) */
+function xlDate(v){
+  if(v==null||v==="")return"";
+  if(typeof v==="number"&&window.XLSX){const d=XLSX.SSF.parse_date_code(v);if(d&&d.y)return`${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;return""}
+  if(v instanceof Date&&!isNaN(v))return`${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,"0")}-${String(v.getDate()).padStart(2,"0")}`;
+  const s=String(v).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return`${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
+  m=s.match(/^(\d{1,2})[.\/\-\s]+(\d{1,2})[.\/\-\s]+0?(\d{4})$/);if(!m)return"";
+  let a=+m[1],b=+m[2],d,mo;if(a>12){d=a;mo=b}else if(b>12){mo=a;d=b}else{d=a;mo=b}
+  if(mo<1||mo>12||d<1||d>31)return"";return`${m[3]}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
+function readMembersFromSheet(rows){
+  const hi=rows.findIndex(r=>r&&r.some(c=>/FİN|FIN/i.test(String(c||"")))&&r.some(c=>/Soyad/i.test(String(c||""))));
+  if(hi<0)return null;
+  const H=rows[hi].map(c=>String(c||"").toLocaleLowerCase("az"));
+  const col=re=>H.findIndex(h=>re.test(h));
+  const C={no:col(/^№|^n[oº]/),unit:col(/struktur|bölmə|iş yeri/),pos:col(/vəzifə/),name:col(/soyad/),fin:col(/fin/),birth:col(/təvəllüd|doğum/),edu:col(/təhsil/),hired:col(/təyinat|işə qəbul/),sst:H.findIndex(h=>/status/.test(h)&&!/üzvlük/.test(h))};
+  const out=[];
+  for(const r of rows.slice(hi+1)){if(!r)continue;const g=k=>C[k]>=0?r[C[k]]:"";const name=normName(g("name"));if(!name)continue;
+    out.push({no:g("no")===""?"":Number(g("no"))||"",unit:normName(g("unit")),pos:normName(g("pos")),name,fin:normFin(g("fin")),birth:xlDate(g("birth")),edu:normName(g("edu")),hired:xlDate(g("hired")),sst:C.sst>=0?normName(g("sst")):""})}
+  return out}
+/* Uçot kartı siyahısını bütövlükdə dəyişmək (köhnəni silib yenisini yazmaq) */
+async function setAllMembers(next,tag){
+  if(mode==="db"){
+    const keep=new Set(next.map(m=>m.id));
+    for(const m of mem)if(!keep.has(m.id))await db.collection("mem").doc(m.id).delete();
+    for(const m of next){const{id,...b}=m;await db.collection("mem").doc(id).set(b)}
+  }else{if(window.api&&window.api.snapshot)window.api.snapshot(tag);mem=next;memVer++;lsSet()}
+  mEdit=null;mConfirm=null;mDraft=null;mUnit="";
+}
+async function readMembersFile(file){
+  if(!window.XLSX){toast("Excel kitabxanası yüklənmədi");return null}
+  let rows;try{const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:false});
+    for(const n of wb.SheetNames){const r=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:""});const L=readMembersFromSheet(r);if(L&&L.length){rows=L;break}}}
+  catch(e){toast("Excel faylı oxunmadı");return null}
+  if(!rows){toast("Faylda «Soyadı, adı, ata adı» və «FİN» sütunları tapılmadı");return null}
+  return rows}
+/* Köhnə siyahını ləğv edib yeni Excel faylı ilə əvəz etmək */
+async function replaceMembersFile(file){
+  if(licBlocked()){toast(licMsg());return}
+  const rows=await readMembersFile(file);if(!rows)return;
+  const byKey=new Map(mem.map(m=>[memKey(m),m]));const now=new Date().toISOString();let same=0;
+  const seen=new Set();const next=[];
+  for(const r of rows){const k=memKey(r);if(seen.has(k))continue;seen.add(k);const ex=byKey.get(k);
+    if(ex){next.push({...ex,...r,status:ex.status,exitDate:ex.exitDate,exitBasis:ex.exitBasis,note:ex.note,updatedAt:now});same++}
+    else next.push({...r,id:newId(),status:"Üzv",exitDate:"",exitBasis:"",note:"",updatedAt:now})}
+  const gone=mem.length-same;
+  if(!confirm(`Köhnə siyahı ləğv olunacaq və yeni fayl ilə əvəz ediləcək.\n\nYeni faylda: ${next.length} nəfər\nKöhnə siyahıda olub yeni faylda olmayan (silinəcək): ${gone}\n\nHər iki faylda olan şəxslərin üzvlük statusu və xaric məlumatları saxlanılacaq.\nKöhnə məlumatların ehtiyat nüsxəsi avtomatik saxlanılır. Davam edilsin?`))return;
+  await setAllMembers(next,"evez-oncesi");
+  toast(`Siyahı yeniləndi: ${next.length} nəfər`);render()}
+/* İdxal olunmuş siyahını tamamilə ləğv etmək */
+async function clearMembers(){
+  if(licBlocked()){toast(licMsg());return}
+  if(!mem.length){toast("Siyahı onsuz da boşdur");return}
+  if(!confirm(`Uçot kartındakı bütün ${mem.length} qeyd silinəcək.\nKöhnə məlumatların ehtiyat nüsxəsi avtomatik saxlanılır.\n\nDavam edilsin?`))return;
+  await setAllMembers([],"temizleme-oncesi");
+  toast("Siyahı təmizləndi. Yeni Excel faylını «Excel-dən idxal» ilə yükləyə bilərsiniz.");render()}
+async function importMembersFile(file){
+  const rows=await readMembersFile(file);if(!rows)return;
+  const byKey=new Map(mem.map(m=>[memKey(m),m]));let add=0,upd=0;const now=new Date().toISOString();
+  const next=mem.slice();
+  for(const r of rows){const ex=byKey.get(memKey(r));
+    if(ex){const i=next.indexOf(ex);next[i]={...ex,...r,status:ex.status,exitDate:ex.exitDate,exitBasis:ex.exitBasis,note:ex.note,updatedAt:now};upd++}
+    else{const m={...r,id:newId(),status:"Üzv",exitDate:"",exitBasis:"",note:"",updatedAt:now};next.push(m);byKey.set(memKey(m),m);add++}}
+  if(licBlocked()){toast(licMsg());return}
+  if(!confirm(`Faylda ${rows.length} nəfər tapıldı.\nYeni əlavə olunacaq: ${add}\nYenilənəcək (artıq siyahıda olan): ${upd}\n\nÜzvlük statusu və xaric məlumatları dəyişdirilməyəcək. Davam edilsin?`))return;
+  if(mode==="db"){for(const m of next){const{id,...b}=m;await db.collection("mem").doc(id).set(b)}}
+  else{if(window.api&&window.api.snapshot)window.api.snapshot("idxal-oncesi");mem=next;memVer++;lsSet()}
+  toast(`İdxal edildi: ${add} yeni, ${upd} yeniləndi`);render()}
+
+let mView="active",mUnit="",mq="",mEdit=null,mConfirm=null,mDraft=null;
+function memHTML(){
+  refreshMemLists();
+  const ed=mEdit&&mem.find(x=>x.id===mEdit);
+  const o=ed||mDraft||{name:"",fin:"",birth:"",unit:"",pos:"",edu:"",hired:"",sst:"",status:"Üzv",exitDate:"",exitBasis:"",note:""};
+  const act=mem.filter(m=>!isOut(m)).length,outN=mem.length-act;
+  let list=mem.filter(m=>mView==="all"||(mView==="out"?isOut(m):!isOut(m)));
+  if(mUnit)list=list.filter(m=>m.unit===mUnit);
+  const qs=mq.trim().toLocaleLowerCase("az");
+  if(qs)list=list.filter(m=>[m.name,m.fin,m.unit,m.pos,m.edu,m.exitBasis,m.sst].join(" ").toLocaleLowerCase("az").includes(qs));
+  list.sort((a,b)=>mView==="out"?(b.exitDate||"").localeCompare(a.exitDate||""):((Number(a.no)||1e9)-(Number(b.no)||1e9))||normName(a.name).localeCompare(normName(b.name),"az"));
+  const units=[...new Set(mem.map(m=>m.unit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"az"));
+  const aidOf=m=>aid.filter(a=>normName(a.name).toLocaleLowerCase("az")===normName(m.name).toLocaleLowerCase("az"));
+  const outCols=mView!=="active";
+  const body=list.length?list.map((m,i)=>`<tr tabindex="0" data-mem="${m.id}" class="${m.id===mEdit?"sel":""} ${isOut(m)&&mView==="all"?"out":""}">
+      <td class="num">${i+1}</td>
+      <td>${esc(normName(m.name))}<div class="mut">${esc(m.fin||"")}${m.birth?" · "+dmy(m.birth):""}${m.sst?` · <b class="sst">${esc(m.sst)}</b>`:""}</div></td>
+      <td>${esc(m.unit||"")}<div class="mut">${esc(m.pos||"")}</div></td>
+      ${outCols?`<td>${isOut(m)?`<span class="st rej">Xaric</span> ${dmy(m.exitDate)}<div class="mut">${esc(m.exitBasis||"")}</div>${azApplies(m)?`<div style="margin-top:4px">${gfBadge(m)}</div>`:""}`:`<span class="st done">Üzv</span>`}</td>`:`<td class="num">${dmy(m.hired)}</td>`}</tr>`).join("")
+    :`<tr><td colspan="4"><div class="empty"><b>${mem.length?"Uyğun qeyd yoxdur":"Siyahı boşdur"}</b>${mem.length?"":"«Excel-dən idxal» düyməsi ilə üzvlərin siyahısını yükləyin və ya soldakı formu doldurun."}</div></td></tr>`;
+  const opt=(arr,v)=>arr.map(x=>`<option${x===v?" selected":""}>${esc(x)}</option>`).join("");
+  const A=ed?aidOf(ed):[];
+  const ttl=mView==="out"?"Üzvlükdən xaric olanlar":mView==="all"?"Bütün qeydlər":"Həmkarlar ittifaqı üzvləri";
+  return`<div class="split">
+  <section class="card${ed?" printable":""}" data-ptitle="Uçot kartı — ${esc(normName(o.name))}"><h2>${ed?"Uçot kartı":"Yeni üzv"}${ed?(isOut(ed)?'<span class="badge" style="color:var(--danger);background:var(--danger-soft)">xaric</span>':'<span class="badge">redaktə</span>'):""}</h2>
+    <p class="hint">${ed?"Üzvün məlumatlarını dəyişə və ya üzvlükdən xaric edə bilərsiniz.":"Siyahıdan şəxsi seçin və ya yeni üzv əlavə edin."}</p>
+    <form class="entry" id="mentry" novalidate>
+      <div class="fld"><label for="m-name">Soyadı, adı, ata adı *</label><input id="m-name" name="name" value="${esc(normName(o.name))}" autocomplete="off"></div>
+      <div class="row2"><div class="fld"><label for="m-fin">FİN</label><input id="m-fin" name="fin" value="${esc(o.fin)}" maxlength="7" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.08em"></div>
+        <div class="fld"><label for="m-birth">Təvəllüdü</label><input id="m-birth" name="birth" type="date" value="${esc(o.birth)}"><span class="help">${age(o.birth)}</span></div></div>
+      <div class="fld"><label for="m-unit">Struktur bölmə</label><input id="m-unit" name="unit" list="unitList" value="${esc(o.unit)}" autocomplete="off"></div>
+      <div class="row2"><div class="fld"><label for="m-pos">Vəzifə</label><input id="m-pos" name="pos" value="${esc(o.pos)}"></div>
+        <div class="fld"><label for="m-hired">Təyinat tarixi</label><input id="m-hired" name="hired" type="date" value="${esc(o.hired)}"></div></div>
+      <div class="fld"><label for="m-edu">Təhsili, təhsil müəssisəsi, ixtisası</label><textarea id="m-edu" name="edu" rows="2">${esc(o.edu)}</textarea></div>
+      <div class="fld"><label for="m-sst">Status</label><input id="m-sst" name="sst" value="${esc(o.sst||"")}" autocomplete="off"><span class="help">Excel-dəki «Status» sütunundan gəlir; əl ilə də yazmaq olar.</span></div>
+      <div class="fld"><label for="m-status">Üzvlük</label><select id="m-status" name="status">${opt(MSTAT,o.status||"Üzv")}</select></div>
+      <div id="m-exit" class="entry" style="display:grid;gap:12px" ${o.status==="Üzvlükdən xaric"?"":"hidden"}>
+        <div class="fld"><label for="m-exitDate">Xaric olma tarixi</label><input id="m-exitDate" name="exitDate" type="date" value="${esc(o.exitDate)}"></div>
+        <div class="fld"><label for="m-exitBasis">Əmək Məcəlləsinin hansı bəndinə uyğun olaraq</label><input id="m-exitBasis" name="exitBasis" list="basisList" value="${esc(o.exitBasis)}" autocomplete="off" placeholder="Siyahıdan seçin və ya yazın">
+          <span class="help">Siyahıdan seçin və ya dəqiq bəndi özünüz yazın, məs.: «maddə 70, ç bəndi».</span></div>
+        <div class="fld"><label for="m-note">Qeyd (əmr №, tarix)</label><input id="m-note" name="note" value="${esc(o.note)}"></div>
+        ${azGfHTML(o)}</div>
+      ${A.length?`<p class="mut">Maddi yardım: ${A.map(a=>`${money(a.amount)} AZN (${dmy(a.date)})`).join(", ")}</p>`:""}
+      <div class="form-msg" id="mmsg"></div>
+      <div class="form-actions"><button class="btn primary" type="submit">${ed?"Yadda saxla":"Əlavə et"}</button>
+        ${ed?`<button class="btn" type="button" id="mCancel">Bağla</button><button class="btn ${mConfirm===mEdit?"danger":"ghost"}" type="button" id="mDel">${mConfirm===mEdit?"Silinsin? Təsdiqlə":"Sil"}</button>`:""}</div>
+    </form>${ed&&isOut(ed)?(azApplies(ed)?gfBar("az",ed):`<div class="gf-bar"><span class="mut">Bu hal (${esc(ed.exitBasis||"")}) RB «İşdən azad edilmiş üzvlər» formasına aid deyil.</span></div>`):""}</section>
+  <section class="card printable" data-ptitle="${esc(ttl)}"><h2>${esc(ttl)}</h2>
+    <div class="reg-tools" style="margin-top:10px">
+      <select id="mView" aria-label="Siyahı"><option value="active"${mView==="active"?" selected":""}>Üzvlər (${act})</option><option value="out"${mView==="out"?" selected":""}>Üzvlükdən xaric olanlar (${outN})</option><option value="all"${mView==="all"?" selected":""}>Hamısı (${mem.length})</option></select>
+      <select id="mUnit" aria-label="Struktur bölmə"><option value="">Bütün struktur bölmələr</option>${units.map(u=>`<option${u===mUnit?" selected":""}>${esc(u)}</option>`).join("")}</select>
+      <input id="mq" class="srch" type="search" placeholder="Axtar: ad, FİN, vəzifə…" value="${esc(mq)}" aria-label="Axtar">
+      <button class="btn" type="button" id="mImport" title="Fayldakı şəxsləri mövcud siyahıya əlavə edir, olanları yeniləyir">Excel-dən idxal</button><input type="file" id="mFile" accept=".xlsx,.xls" hidden>
+      ${mem.length?`<button class="btn" type="button" id="mReplace" title="Köhnə siyahını ləğv edib yeni Excel faylı ilə əvəz edir">Yeni Excel ilə əvəz et</button><input type="file" id="mFile2" accept=".xlsx,.xls" hidden>
+      <button class="btn danger" type="button" id="mClear" title="İdxal olunmuş siyahını tamamilə silir">Siyahını təmizlə</button>`:""}</div>
+    <div class="sum">${list.length} nəfər${mUnit?` · ${esc(mUnit)}`:""}</div>
+    <div class="tbl-wrap"><table class="reg"><thead><tr><th class="num">№</th><th>S.A.A.</th><th>Struktur bölmə / vəzifə</th>${outCols?"<th>Üzvlük</th>":'<th class="num">Təyinat</th>'}</tr></thead><tbody>${body}</tbody></table></div>
+    ${mView!=="active"?`<p class="mut">Hesabat dövründə işdən azad olunan üzv olmayıbsa: <button class="btn ghost" type="button" id="azNone">RB formasını «Xeyr» cavabı ilə aç</button></p>`:""}
+    <p class="mut">Sətrə toxunanda şəxsin uçot kartı açılır. «Maddi yardım» bölməsində ad yazanda bu siyahıdan seçmək olur.</p></section></div>`;
+}
+function readMem(){const fd=new FormData($("#mentry"));const g=k=>(fd.get(k)??"").toString().trim();
+  return{name:normName(g("name")),fin:normFin(g("fin")),birth:g("birth"),unit:normName(g("unit")),pos:normName(g("pos")),hired:g("hired"),edu:g("edu"),sst:normName(g("sst")),status:g("status")||"Üzv",exitDate:g("exitDate"),exitBasis:normName(g("exitBasis")),note:g("note"),...readKeys(fd,AZ_KEYS)}}
+function bindMem(){
+  const f=$("#mentry");gfToggle(f);f.addEventListener("change",()=>gfToggle(f));
+  if(mEdit)bindGf("az",()=>{const r=mem.find(x=>x.id===mEdit);return r?{...r,...azAuto(r)}:r},putMem,()=>readMem());
+  $("#azNone")?.addEventListener("click",()=>{gfOpenUrl(gfLink("az",[[1485710170,gfCfg().kom],[2106465526,"Xeyr"]]))});
+  f.addEventListener("input",e=>{if(!mEdit)mDraft=readMem();
+    if(e.target.name==="status"){const x=e.target.value==="Üzvlükdən xaric";$("#m-exit").hidden=!x;if(x&&!$("#m-exitDate").value)$("#m-exitDate").value=new Date().toISOString().slice(0,10)}
+    if(e.target.name==="fin"){const p=e.target.selectionStart;e.target.value=normFin(e.target.value);try{e.target.setSelectionRange(p,p)}catch(x){}}});
+  f.addEventListener("submit",async e=>{e.preventDefault();const o=readMem(),m=$("#mmsg");
+    if(!o.name){m.className="form-msg err";m.textContent="Soyadı, adı, ata adını yazın.";return}
+    if(o.fin&&!/^[0-9A-Z]{7}$/.test(o.fin)){m.className="form-msg err";m.textContent="FİN 7 hərf və rəqəmdən ibarət olmalıdır.";return}
+    if(o.status==="Üzvlükdən xaric"&&(!o.exitDate||!o.exitBasis)){m.className="form-msg err";m.textContent="Xaric olma tarixini və Əmək Məcəlləsinin bəndini göstərin.";return}
+    if(o.status!=="Üzvlükdən xaric"){o.exitDate="";o.exitBasis="";o.note="";AZ_KEYS.forEach(k=>delete o[k])}
+    const prev=mEdit&&mem.find(x=>x.id===mEdit);
+    const rec={...(prev||{}),...o,id:mEdit||newId(),updatedAt:new Date().toISOString()};
+    if(prev&&prev.gfSent&&isOut(rec))rec.gfSent=prev.gfSent;if(!isOut(rec))delete rec.gfSent;
+    try{await putMem(rec);const was=!!mEdit;mEdit=isOut(rec)?rec.id:null;mConfirm=null;mDraft=null;toast(was?(isOut(rec)&&!(prev&&isOut(prev))?"Üzvlükdən xaric edildi":"Dəyişiklik yadda saxlandı"):"Üzv əlavə edildi");render()}
+    catch(err){m.className="form-msg err";m.textContent=errText(err)}});
+  $("#mCancel")?.addEventListener("click",()=>{mEdit=null;mConfirm=null;render()});
+  $("#mDel")?.addEventListener("click",async()=>{if(mConfirm!==mEdit){mConfirm=mEdit;render();return}
+    try{await delMem(mEdit);mEdit=null;mConfirm=null;toast("Silindi");render()}catch(err){$("#mmsg").className="form-msg err";$("#mmsg").textContent=errText(err)}});
+  $("#mView").addEventListener("change",e=>{mView=e.target.value;render()});
+  $("#mUnit").addEventListener("change",e=>{mUnit=e.target.value;render()});
+  const s=$("#mq");s.addEventListener("input",()=>{mq=s.value;const p=s.selectionStart;render();const n=$("#mq");n.focus();try{n.setSelectionRange(p,p)}catch(e){}});
+  $("#mImport").addEventListener("click",()=>$("#mFile").click());
+  $("#mFile").addEventListener("change",e=>{const fl=e.target.files&&e.target.files[0];e.target.value="";if(fl)importMembersFile(fl)});
+  if($("#mReplace")){
+    $("#mReplace").addEventListener("click",()=>$("#mFile2").click());
+    $("#mFile2").addEventListener("change",e=>{const fl=e.target.files&&e.target.files[0];e.target.value="";if(fl)replaceMembersFile(fl)});
+    $("#mClear").addEventListener("click",clearMembers);
+  }
+  document.querySelectorAll("tr[data-mem]").forEach(t=>{const open=()=>{mEdit=t.dataset.mem;mConfirm=null;gfPend=null;render();scrollTo({top:0,behavior:"smooth"})};
+    t.addEventListener("click",open);t.addEventListener("keydown",e=>{if(e.key==="Enter")open()})});
+}
+
+/* ---------- Ərizə və məktublar (incoming register) ---------- */
+const LTYPES=["Ərizə","Məktub","Şikayət","Müraciət","Digər"];
+const LSTAT=["Baxılır","Cavablandırılıb","Maddi yardım verildi","İcraya göndərildi","Rədd edildi","Məlumat üçün"];
+const normFin=v=>String(v||"").toUpperCase().replace(/\s/g,"");
+function nextNo(){const y=new Date().getFullYear();const nums=letters.filter(x=>(x.date||"").startsWith(String(y))).map(x=>parseInt(String(x.no||"").replace(/\D.*$/,""))).filter(n=>!isNaN(n));return String((nums.length?Math.max(...nums):0)+1)}
+function age(b){if(!b)return"";const d=new Date(b),n=new Date();let a=n.getFullYear()-d.getFullYear();if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate()))a--;return a>=0&&a<130?a+" yaş":""}
+const statCls=s=>s==="Baxılır"?"pend":s==="Rədd edildi"?"rej":s==="Məlumat üçün"?"info":"done";
+const BUD_DEF={title:"Mədəniyyət İşçiləri Həmkarlar ittifaqının Şəmkir rayonunun",
+  l:{org:"MİHİ Şəmkir RK-nin Rəyasət Heyətinin",date:"«26» dekabr 2025-ci il tarixli",no:"«12» №-li qərarı ilə təsdiq edilmişdir",chair:"Azər İsmayılov"},
+  r:{org:"Mədəniyyət İşçiləri Həmkarlar İttifaqının Rəyasət Heyətinin",date:"«29» dekabr 2025-ci il tarixli",no:"«9» №-li qərarı ilə təsdiq edilmişdir",chair:"E.Ziyadov"}};
+const bud=()=>{const x=form.budget||{};return{title:x.title??BUD_DEF.title,l:{...BUD_DEF.l,...(x.l||{})},r:{...BUD_DEF.r,...(x.r||{})}}};
+/* «2026-cı», «2025-ci», «2023-cü», «2029-cu», «2030-cu», «2040-cı» */
+function ilSuffix(y){const n=+y;if(!n)return"";
+  const one={1:"ci",2:"ci",3:"cü",4:"cü",5:"ci",6:"cı",7:"ci",8:"ci",9:"cu"},ten={1:"cu",2:"ci",3:"cu",4:"cı",5:"ci",6:"cı",7:"ci",8:"ci",9:"cı"};
+  const L=n%10,T=Math.floor(n/10)%10;return"-"+(L?one[L]:T?ten[T]:(Math.floor(n/100)%10?"cü":"ci"))}
+const budYear=()=>(form.start||"").slice(0,4)||String(Y0);
+const BUD_NAME={"2.6.1":"Dəftərxana və təsərrüfat mallarının alınması","2.6.2":"Əsas vəsaitlərin və qeyri maddi aktivlərin alınması"};
+const budName=r=>BUD_NAME[r.code]||r.name;
+const BUD_INC=()=>ROWS.filter(r=>/^1\.\d+$/.test(r.code));
+/* Planın cəmləri (Excel-dəki düsturlar): ehtiyat fondu = (cəmi gəlirlər − 2.9) × 2% */
+function budCalc(pv){
+  const sumP=c=>isParent(c)?childrenOf(c).reduce((a,r)=>a+sumP(r.code),0):num(pv(c));
+  const inc=BUD_INC().reduce((a,r)=>a+num(pv(r.code)),0);
+  const exp=EXP_SECTIONS.reduce((a,r)=>a+sumP(r.code),0);
+  const res=Math.round((inc-sumP("2.9"))*0.02*100)/100;
+  return{sumP,inc,exp,res,bal:inc-exp-res}}
+function planHTML(){
+  const R=compute(),B=bud(),Y=budYear(),C=budCalc(c=>form.plan[c]);
+  const inp=(c,v)=>`<input type="number" min="0" step="0.01" data-plan="${c}" id="p-${c.replace(/\./g,"_")}" value="${num(v)||""}" aria-label="${esc(c)} plan">`;
+  const bi=(k,v,ph,cls="")=>`<input class="bud-t ${cls}" data-bud="${k}" value="${esc(v)}" placeholder="${esc(ph)}" aria-label="${esc(ph)}">`;
+  const side=(s,o)=>`<div class="bud-side"><textarea class="bud-t bud-org" rows="2" data-bud="${s}.org" placeholder="Təsdiq edən orqan" aria-label="Təsdiq edən orqan">${esc(o.org)}</textarea>${bi(s+".date",o.date,"Tarix")}${bi(s+".no",o.no,"Qərar №")}
+    <div class="bud-sig">Sədr: <span class="ln"></span>${bi(s+".chair",o.chair,"Adı və soyadı","bud-chair")}</div>
+    <div class="bud-cap"><span>(İmza)</span><span>(Adı və soyadı)</span></div><div class="bud-my">M.Y.</div></div>`;
+  const fk=v=>`<td class="fakt">${moneyZ(v)}</td>`;
+  const leaf=(r,cls="")=>`<tr class="${cls}"><td class="code">${r.code}</td><td class="name">${esc(budName(r))}</td><td class="pin">${inp(r.code,form.plan[r.code])}<span class="pv">${moneyZ(form.plan[r.code])}</span></td>${fk(R.fv(r.code))}</tr>`;
+  const inc=BUD_INC().map(r=>leaf(r)).join("");
+  const exp=EXP_SECTIONS.map(s=>{const kids=childrenOf(s.code);
+    if(!kids.length)return leaf(s,"grp");
+    return`<tr class="grp"><td class="code">${s.code}</td><td class="name">${esc(s.name)}</td><td data-sum="${s.code}">${money(C.sumP(s.code))}</td>${fk(R.sumF(s.code))}</tr>`+kids.map(k=>leaf(k,"lv2")).join("")}).join("");
+  return`<div class="stack"><article class="sheet printable plan-sheet" data-ptitle="${esc(Y)}${ilSuffix(Y)} il üzrə büdcə">
+    <p class="hint">Excel-dəki büdcə forması. Xanalara məbləğləri yazın; bölmələrin cəmi, ehtiyat fondu (2%) və profisit avtomatik hesablanır. Boz «Fakt» sütunu seçilmiş dövrün faktıdır və çapa düşmür.</p>
+    <div class="bud-head">${side("l",B.l)}${side("r",B.r)}</div>
+    <h2 class="bud-title">${bi("title",B.title,"Büdcənin adı","bud-tt")} <span>${esc(Y)}${ilSuffix(Y)} il üzrə büdcəsi</span></h2>
+    <div class="tbl-wrap"><table class="rep bud"><thead><tr><th class="l">Təsnifat kodu</th><th class="l">Gəlirlərin mənbələri</th><th>Məbləğ (AZN)</th><th class="fakt">Fakt</th></tr></thead><tbody>
+      <tr class="head"><td class="code">1</td><td class="name" colspan="3">Gəlirlər</td></tr>${inc}
+      <tr class="tot"><td></td><td class="name">Cəmi gəlirlər</td><td id="bInc">${money(C.inc)}</td>${fk(R.D27)}</tr></tbody></table></div>
+    <div class="tbl-wrap" style="margin-top:14px"><table class="rep bud"><thead><tr><th class="l">Təsnifat kodu</th><th class="l">Xərclərin istiqamətləri</th><th>Məbləğ (AZN)</th><th class="fakt">Fakt</th></tr></thead><tbody>
+      <tr class="head"><td class="code">2</td><td class="name" colspan="3">Xərclər</td></tr>${exp}
+      <tr class="tot"><td></td><td class="name">Cəmi xərclər</td><td id="bExp">${money(C.exp)}</td>${fk(R.D74)}</tr></tbody></table></div>
+    <div class="tbl-wrap" style="margin-top:14px"><table class="rep bud"><tbody>
+      <tr class="tot"><td class="code"></td><td class="name">Ehtiyat fondu (2%)</td><td id="bRes">${money(C.res)}</td><td class="fakt"></td></tr>
+      <tr class="tot"><td class="code"></td><td class="name">Büdcə ili üzrə profisit (defisit)</td><td id="bBal" class="${C.bal<0?"over":""}">${money(C.bal)}</td><td class="fakt"></td></tr></tbody></table></div>
+    <div class="form-actions" style="margin-top:14px"><button class="btn primary" id="savePlan">Planı yadda saxla</button>
+      <button class="btn" type="button" id="planImp" title="Təsdiq olunmuş büdcənin Excel faylından məbləğləri və təsdiq məlumatlarını oxuyur">Excel-dən yüklə</button><input type="file" id="planFile" accept=".xlsx,.xls" hidden>
+      <button class="btn" type="button" id="planExp">Excel-ə çıxar</button><span class="form-msg" id="pmsg"></span></div></article></div>`;
+}
+function readPlanInputs(){const p={};document.querySelectorAll("[data-plan]").forEach(i=>{if(i.value!=="")p[i.dataset.plan]=Number(i.value)});return p}
+function readBudInputs(){const B=bud();document.querySelectorAll("[data-bud]").forEach(i=>{const[k,f]=i.dataset.bud.split(".");if(f)B[k][f]=i.value.trim();else B[k]=i.value.trim()});return B}
+function planRecalc(){const p=readPlanInputs(),C=budCalc(c=>p[c]);
+  document.querySelectorAll("[data-plan]").forEach(i=>{const s=i.nextElementSibling;if(s)s.textContent=moneyZ(p[i.dataset.plan])});
+  document.querySelectorAll("[data-sum]").forEach(td=>td.textContent=money(C.sumP(td.dataset.sum)));
+  $("#bInc").textContent=money(C.inc);$("#bExp").textContent=money(C.exp);$("#bRes").textContent=money(C.res);
+  const b=$("#bBal");b.textContent=money(C.bal);b.classList.toggle("over",C.bal<0)}
+/* Təsdiq olunmuş büdcə faylını oxumaq (Excel-dəki forma) */
+function readBudgetSheet(rows){
+  const ok=new Set(ROWS.filter(r=>!isParent(r.code)&&r.code!=="1"&&r.code!=="2").map(r=>r.code));
+  const plan={};let found=0;const txt=[];
+  for(const r of rows){if(!r)continue;const cells=r.map(c=>c==null?"":c);
+    txt.push(...cells.filter(c=>typeof c==="string"&&c.trim()));
+    const i=cells.findIndex(c=>ok.has(String(c).trim()));if(i<0)continue;
+    const code=String(cells[i]).trim();found++;
+    const v=cells.slice(i+1).find(c=>typeof c==="number"||(typeof c==="string"&&/^\s*-?[\d\s]+([.,]\d+)?\s*$/.test(c)));
+    if(v!==undefined&&v!==""){const n=typeof v==="number"?v:Number(String(v).replace(/\s/g,"").replace(",","."));if(n)plan[code]=Math.round(n*100)/100}}
+  if(found<5)return null;
+  const B=bud(),all=txt.join("\n");
+  const t=all.match(/(.*?)\s*\d{4}\s*-?\s*c\S*\s+il\s+üzrə\s+büdcəsi/i);if(t&&t[1].trim())B.title=normName(t[1]);
+  const dates=[...all.matchAll(/["«“]\s*(\d{1,2})\s*["»”]\s+([^\s\d"«»]+)\s+(\d{4})\s*-?\s*c\S*\s+il\s+tarixli/g)];
+  if(dates[0])B.l.date=`«${dates[0][1]}» ${dates[0][2]} ${dates[0][3]}${ilSuffix(dates[0][3])} il tarixli`;
+  if(dates[1])B.r.date=`«${dates[1][1]}» ${dates[1][2]} ${dates[1][3]}${ilSuffix(dates[1][3])} il tarixli`;
+  const nos=[...all.matchAll(/["«“]\s*(\d+)\s*["»”]\s*№\s*-?\s*li\s+qərarı/g)];
+  if(nos[0])B.l.no=`«${nos[0][1]}» №-li qərarı ilə təsdiq edilmişdir`;if(nos[1])B.r.no=`«${nos[1][1]}» №-li qərarı ilə təsdiq edilmişdir`;
+  const ch=[...all.matchAll(/Sədr\s*:\s*_*\s*([^_\n]+?)(?=\s{3,}|\s*$)/gm)].map(m=>normName(m[1])).filter(Boolean);
+  if(ch[0])B.l.chair=ch[0];if(ch[1])B.r.chair=ch[1];
+  return{plan,B}}
+function exportBudgetXlsx(){
+  if(!window.XLSX){toast("Excel kitabxanası yüklənmədi");return}
+  const p=readPlanInputs(),B=readBudInputs(),C=budCalc(c=>p[c]),Y=budYear(),z=v=>num(v)||"";
+  const A=[[B.l.org,"",B.r.org],[B.l.date,"",B.r.date],[B.l.no,"",B.r.no],[],[`Sədr: ____________ ${B.l.chair}`,"",`Sədr: ____________ ${B.r.chair}`],["M.Y.","","M.Y."],[],
+    [`${B.title} ${Y}${ilSuffix(Y)} il üzrə büdcəsi`],[],
+    ["Təsnifat kodu","Gəlirlərin mənbələri","Məbləğ (AZN)"],[1,"Gəlirlər"],...BUD_INC().map(r=>[r.code,r.name,z(p[r.code])]),["","Cəmi gəlirlər",C.inc],[],
+    ["Təsnifat kodu","Xərclərin istiqamətləri","Məbləğ (AZN)"],[2,"Xərclər"]];
+  for(const s of EXP_SECTIONS){const kids=childrenOf(s.code);A.push([s.code,s.name,kids.length?C.sumP(s.code):z(p[s.code])]);for(const k of kids)A.push([k.code,budName(k),z(p[k.code])])}
+  A.push(["","Cəmi xərclər",C.exp],[],["","Ehtiyat fondu (2%)",C.res],[],["","Büdcə ili üzrə profisit (defisit)",C.bal]);
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(A);
+  ws["!cols"]=[{wch:12},{wch:70},{wch:16}];ws["!merges"]=[{s:{r:7,c:0},e:{r:7,c:2}}];
+  for(const k in ws){if(k[0]==="C"&&typeof ws[k].v==="number")ws[k].z="#,##0.00"}
+  XLSX.utils.book_append_sheet(wb,ws,`${Y}-büdcə`);
+  XLSX.writeFile(wb,`${Y}${ilSuffix(Y)} il üzrə büdcə.xlsx`)}
+function bindPlan(){
+  $("#view").querySelectorAll("[data-plan]").forEach(i=>i.addEventListener("input",planRecalc));
+  $("#savePlan").addEventListener("click",async()=>{if(licBlocked()){toast(licMsg());return}
+    form.plan=readPlanInputs();form.budget=readBudInputs();try{await putForm();toast("Plan yadda saxlandı")}catch(e){$("#pmsg").className="form-msg err";$("#pmsg").textContent=errText(e)}});
+  $("#planExp").addEventListener("click",exportBudgetXlsx);
+  $("#planImp").addEventListener("click",()=>$("#planFile").click());
+  $("#planFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;
+    if(licBlocked()){toast(licMsg());return}if(!window.XLSX){toast("Excel kitabxanası yüklənmədi");return}
+    let r=null;try{const wb=XLSX.read(await f.arrayBuffer(),{type:"array"});
+      for(const n of wb.SheetNames){r=readBudgetSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:""}));if(r)break}}catch(x){toast("Excel faylı oxunmadı");return}
+    if(!r){toast("Faylda büdcə maddələri (1.1, 2.1.1 …) tapılmadı");return}
+    const n=Object.keys(r.plan).length;
+    if(!confirm(`Faylda ${n} maddə üzrə məbləğ tapıldı.\nHazırkı plan bu fayldakı məbləğlərlə əvəz olunacaq. Davam edilsin?`))return;
+    form.plan=r.plan;form.budget=r.B;try{await putForm();toast("Büdcə Excel-dən yükləndi");render()}catch(x){toast(errText(x))}});
+}
+
+function settingsHTML(){
+  const b=form.bal,rb=form.rb;const n=(id,v,l)=>`<div class="fld"><label for="${id}">${l}</label><input id="${id}" type="number" step="0.01" value="${num(v)||""}" placeholder="0"></div>`;
+  return`<div class="stack">
+  <section class="card"><h2>Təşkilat və dövr</h2><p class="hint">Dövrü yuxarıdakı düymələrlə də seçə bilərsiniz.</p>
+    <div class="fld"><label for="s-org">Təşkilatın adı</label><input id="s-org" value="${esc(form.org)}" placeholder="Məs.: MİHİ Şəmkir RK"></div>
+    <div class="row3" style="margin-top:12px"><div class="fld"><label for="s-start">Dövrün başlanğıcı</label><input id="s-start" type="date" value="${esc(form.start)}"></div>
+      <div class="fld"><label for="s-end">Dövrün sonu</label><input id="s-end" type="date" value="${esc(form.end)}"></div>
+      <div class="fld"><label for="s-chair">İmza edən şəxs</label><input id="s-chair" value="${esc(form.chair)}"></div></div></section>
+  <section class="card"><h2>Cədvəl №1</h2><p class="hint">Dövrün əvvəlinə və sonuna borclar, AZN.</p>
+    <div class="row2">${n("rb-c6",rb.c6,"RB-nın borcu, dövrün əvvəli")}${n("rb-d6",rb.d6,"RB-nın borcu, dövrün sonu")}${n("rb-c7",rb.c7,"RK-nın RB-nə borcu, əvvəl")}${n("rb-d7",rb.d7,"RK-nın RB-nə borcu, son")}</div></section>
+  <section class="card"><h2>İlin əvvəlinə büdcə vəsaiti qalığı</h2><p class="hint">Fakt cəmi avtomatik 1.9 sətrinə də yazılır.</p>
+    <div class="row3">${n("b-c12",b.c12,"Bank hesabı · plan")}${n("b-c13",b.c13,"Biznes kart · plan")}${n("b-c14",b.c14,"Kassa · plan")}${n("b-d12",b.d12,"Bank hesabı · fakt")}${n("b-d13",b.d13,"Biznes kart · fakt")}${n("b-d14",b.d14,"Kassa · fakt")}</div></section>
+  ${(()=>{const c=gfCfg();return`<section class="card"><h2>RB onlayn hesabatları</h2><p class="hint">Bu dəyərlər «RB formasında aç» zamanı dörd RB formasına (Sosial dəstək, Maddi yardım, Müraciətlər, İşdən azad edilmiş üzvlər) avtomatik yazılır.</p>
+    <div class="row2"><div class="fld"><label for="g-kom">Rayon / şəhər komitəsi</label><select id="g-kom">${gopt(GFO.KOM,c.kom)}</select></div>
+      <div class="fld"><label for="g-status">HİT-in statusu</label><select id="g-status">${gopt(GFO.AID_STATUS,c.status)}</select></div></div>
+    <div class="row2" style="margin-top:12px"><div class="fld"><label for="g-iqt">İqtisadi rayon</label><select id="g-iqt">${gopt(GFO.IQT,c.iqt)}</select></div>
+      <div class="fld"><label for="g-ray">Rayon / şəhər</label><select id="g-ray">${gopt(GFO.RAY,c.ray)}</select></div></div>
+    <div class="row2" style="margin-top:12px"><div class="fld"><label for="g-pay">Maddi yardımın ödəniş üsulu</label><select id="g-pay">${gopt(GFO.AID_PAY,c.pay)}</select></div>
+      <div class="fld"><label for="g-body">Qərarı qəbul edən orqan</label><select id="g-body">${gopt(GFO.AID_BODY,c.body)}</select></div></div>
+    <div class="fld" style="margin-top:12px"><label for="g-resp">Cavabdeh şəxs / icraçı (A.S.A.)</label><input id="g-resp" value="${esc(c.resp)}" placeholder="Sosial dəstək və müraciətlərdə susmaya görə yazılır"></div></section>`})()}
+  <div class="form-actions"><button class="btn primary" id="saveSet">Yadda saxla</button><span class="form-msg" id="smsg"></span></div>
+  ${licCardHTML()}
+  ${window.api?backupCardHTML():webBackupCardHTML()}</div>`}
+/* Telefon / brauzer versiyası: məlumatları kompüterdən köçürmək və nüsxə endirmək */
+function webBackupCardHTML(){return`<section class="card"><h2>Məlumatlar (telefon / brauzer)</h2>
+    <p class="hint">Məlumatlar yalnız bu telefonun brauzerində saxlanılır. Kompüterdəki məlumatları köçürmək üçün: kompüterdə <b>Parametrlər → Ehtiyat nüsxə → «Ehtiyat nüsxə çıxar…»</b>, alınan <b>HI_ehtiyat_….json</b> faylını telefona göndərin (Telegram, WhatsApp, e-poçt) və aşağıdan yükləyin. Fayl yalnız bir dəfə yüklənir; sonra yazdıqlarınız telefonda saxlanılır.</p>
+    <div class="form-actions"><button class="btn primary" type="button" id="wbIn">Ehtiyat nüsxəni yüklə (.json)</button><input type="file" id="wbFile" accept=".json,application/json" hidden>
+      <button class="btn" type="button" id="wbOut">Nüsxəni endir (.json)</button></div><div id="wbAsk" class="notice" hidden style="margin-top:12px"></div></section>`}
+function applyBackup(d){if(!d||!Array.isArray(d.ops)){toast("Bu ehtiyat nüsxə faylı deyil");return}
+  const box=$("#wbAsk");if(box){box.hidden=false;box.innerHTML=`<p>Faylda: <b>${d.ops.length}</b> əməliyyat, <b>${(d.aid||[]).length}</b> maddi yardım, <b>${(d.letters||[]).length}</b> sənəd, <b>${(d.bk||[]).length}</b> biznes kart, <b>${(d.mem||[]).length}</b> üzv, <b>${(d.sd||[]).length}</b> sosial dəstək.<br>Telefondakı hazırkı məlumatlar bu faylla əvəz olunacaq.</p>
+    <div class="form-actions"><button class="btn primary" type="button" id="wbYes">Əvəz et</button><button class="btn" type="button" id="wbNo">Ləğv et</button></div>`;
+    $("#wbNo").onclick=()=>{box.hidden=true};$("#wbYes").onclick=()=>doApplyBackup(d);return}
+  doApplyBackup(d)}
+function doApplyBackup(d){
+  form={...form,...d.form};ops=d.ops;aid=d.aid||[];letters=d.letters||[];bk=d.bk||[];mem=d.mem||[];sd=d.sd||[];memVer++;lsSet();toast("Məlumatlar yükləndi");render()}
+function backupCardHTML(){
+  const I=window.api.backupInfo?window.api.backupInfo():{dir:"",last:"",exists:false};
+  const last=I.last?new Date(I.last):null,lastTxt=last?`${dmy(I.last.slice(0,10))} ${String(last.getHours()).padStart(2,"0")}:${String(last.getMinutes()).padStart(2,"0")}`:"hələ yoxdur";
+  const st=!I.dir?`<span class="st pend">Qovluq seçilməyib</span>`:I.exists?`<span class="st done">Aktivdir</span>`:`<span class="st rej">Qovluq tapılmadı</span>`;
+  return`<section class="card"><h2>Ehtiyat nüsxə</h2>
+    <p class="hint">Məlumatlar bu kompüterdə saxlanılır: <span style="word-break:break-all">${esc(window.api.dataPath())}</span>. Proqram hər gün həmin yerdə avtomatik nüsxə də saxlayır (son 30 gün).</p>
+    <h3 class="sec-title" style="margin-top:6px">Avtomatik ehtiyat qovluğu ${st}</h3>
+    <p class="hint">Fləş-kart, OneDrive və ya başqa disk qovluğu seçin. Hər dəyişiklikdən sonra və proqram bağlananda bütün məlumatlar <b>HI_ehtiyat_İL-AY-GÜN.json</b> faylına ora yazılacaq (son 60 gün saxlanılır).</p>
+    <div class="fld" style="margin-bottom:10px"><label>Seçilmiş qovluq</label><div style="word-break:break-all;font-weight:600">${I.dir?esc(I.dir):"—"}</div>
+      <span class="help">Son ehtiyat: ${esc(lastTxt)}${I.dir&&!I.exists?" · Fləş taxılmayıbsa, taxın və «İndi ehtiyat çıxar» basın.":""}</span></div>
+    <div class="form-actions"><button class="btn primary" id="bkChoose">${I.dir?"Qovluğu dəyiş":"Qovluq seç"}</button>${I.dir?`<button class="btn" id="bkNow">İndi ehtiyat çıxar</button><button class="btn ghost" id="bkOpen">Qovluğu aç</button><button class="btn ghost" id="bkClear">Avtomatik ehtiyatı söndür</button>`:""}</div>
+    <h3 class="sec-title" style="margin-top:18px">Əl ilə</h3>
+    <p class="hint">Faylı istədiyiniz yerə yazın və ya ehtiyat nüsxədən məlumatları bərpa edin. Bərpadan əvvəl hazırkı məlumatların nüsxəsi avtomatik saxlanılır.</p>
+    <div class="form-actions"><button class="btn" id="bkOut">Ehtiyat nüsxə çıxar…</button><button class="btn" id="bkIn">Ehtiyat nüsxədən bərpa et…</button><button class="btn ghost" id="bkDir">Daxili ehtiyat qovluğu</button></div></section>`}
+async function manualBackup(){const d=new Date().toISOString().slice(0,10);const r=await window.api.saveFile(`HI_ehtiyat_${d}.json`,new TextEncoder().encode(JSON.stringify({form,ops,aid,letters,bk,mem,sd},null,1)),"json");if(r)toast("Ehtiyat nüsxə saxlanıldı")}
+const bkMsg=r=>!r?null:r.ok?`Ehtiyat nüsxə yazıldı: ${r.file}`:r.reason==="missing"?"Qovluq tapılmadı. Fləş-kartı taxın və yenidən cəhd edin.":r.reason==="nodata"?"Hələ saxlanılmış məlumat yoxdur.":"Ehtiyat nüsxə yazılmadı"+(r.msg?": "+r.msg:"");
+function bindSettings(){bindLicCard();
+  $("#saveSet").addEventListener("click",async()=>{if(licBlocked()){toast(licMsg());return}const v=id=>$("#"+id).value,nv=id=>Number(v(id))||0,m=$("#smsg");
+    if(!v("s-start")||!v("s-end")||v("s-start")>v("s-end")){m.className="form-msg err";m.textContent="Dövrün başlanğıcı sonundan əvvəl olmalıdır.";return}
+    form={...form,org:v("s-org").trim(),chair:v("s-chair").trim(),start:v("s-start"),end:v("s-end"),
+      gf:{kom:v("g-kom"),status:v("g-status"),iqt:v("g-iqt"),ray:v("g-ray"),resp:v("g-resp").trim(),pay:v("g-pay"),body:v("g-body")},
+      rb:{c6:nv("rb-c6"),d6:nv("rb-d6"),c7:nv("rb-c7"),d7:nv("rb-d7")},
+      bal:{c12:nv("b-c12"),c13:nv("b-c13"),c14:nv("b-c14"),d12:nv("b-d12"),d13:nv("b-d13"),d14:nv("b-d14")}};
+    try{await putForm();toast("Parametrlər yadda saxlandı");render()}catch(e){m.className="form-msg err";m.textContent=errText(e)}});
+  $("#bkOut")?.addEventListener("click",manualBackup);
+  $("#bkChoose")?.addEventListener("click",async()=>{const r=await window.api.chooseBackupDir();if(r){toast(bkMsg(r));render()}});
+  $("#bkNow")?.addEventListener("click",async()=>{const r=await window.api.backupNow();toast(bkMsg(r));render()});
+  $("#bkOpen")?.addEventListener("click",()=>window.api.openBackupDir());
+  $("#bkClear")?.addEventListener("click",async()=>{if(!confirm("Avtomatik ehtiyat söndürülsün? Artıq yazılmış fayllar silinməyəcək."))return;await window.api.clearBackupDir();toast("Avtomatik ehtiyat söndürüldü");render()});
+  $("#bkIn")?.addEventListener("click",async()=>{const t=await window.api.openFile();if(!t)return;let d;try{d=JSON.parse(t)}catch(e){toast("Fayl oxunmadı");return}
+    if(!d||!Array.isArray(d.ops)){toast("Bu ehtiyat nüsxə faylı deyil");return}
+    if(!confirm(`Hazırkı məlumatlar əvəz olunacaq (${d.ops.length} əməliyyat, ${(d.aid||[]).length} maddi yardım, ${(d.letters||[]).length} sənəd, ${(d.bk||[]).length} biznes kart, ${(d.mem||[]).length} üzv, ${(d.sd||[]).length} sosial dəstək). Davam edilsin?`))return;
+    if(window.api.snapshot)window.api.snapshot("berpa-oncesi");
+    form={...form,...d.form};ops=d.ops;aid=d.aid||[];letters=d.letters||[];bk=d.bk||[];mem=d.mem||[];sd=d.sd||[];memVer++;lsSet();toast("Məlumatlar bərpa edildi");render()});
+  $("#bkDir")?.addEventListener("click",()=>window.api.openDir());
+  $("#wbIn")?.addEventListener("click",()=>$("#wbFile").click());
+  $("#wbFile")?.addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;let d;try{d=JSON.parse(await f.text())}catch(x){toast("Fayl oxunmadı");return}applyBackup(d)});
+  $("#wbOut")?.addEventListener("click",()=>{const d=new Date().toISOString().slice(0,10);const blob=new Blob([JSON.stringify({form,ops,aid,letters,bk,mem,sd},null,1)],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`HI_ehtiyat_${d}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)})}
+
+/* ---------- Excel export in the form's layout ---------- */
+async function exportXlsx(){
+  if(!window.XLSX){toast("Excel kitabxanası yüklənmədi");return}
+  const R=compute(),b=form.bal,rb=form.rb,z=v=>num(v)===0?"":num(v);
+  const A=[["Təşkilatın adı:","",form.org],["","Dövr:",periodText()],[],["","","Cədvəl №1"],["","Göstəricilər",dmy(form.start),dmy(form.end)],
+    ["","RB-nın borcu",num(rb.c6),num(rb.d6)],["","RK-nın RB-nə borcu",num(rb.c7),num(rb.d7)],[],
+    ["2. Gəlir və Xərclər","","Cədvəl №2"],["","Maddələrin adı","Plan","Fakt"],
+    ["","İlin əvvəlinə büdcə vəsaiti qalığı",R.C11,R.D11],["","Bank hesabı qalığı",z(b.c12),z(b.d12)],["","Biznes kart qalığı",z(b.c13),z(b.d13)],["","Kassa qalığı",z(b.c14),z(b.d14)],
+    ["Təsnifat kodu","Gəlirlərin mənbələri","Plan","Fakt"],[1,"Gəlirlər"],
+    ...ROWS.filter(r=>/^1\.\d+$/.test(r.code)).map(r=>[r.code,r.name,z(R.pv(r.code)),z(R.fv(r.code))]),
+    ["","Cəmi gəlirlər",R.C27,R.D27],[],[],["Təsnifat kodu","Xərclərin istiqamətləri","Plan","Fakt"],[2,"Xərclər"]];
+  for(const s of EXP_SECTIONS){const kids=childrenOf(s.code);
+    if(!kids.length){A.push([s.code,s.name,z(R.pv(s.code)),z(R.fv(s.code))]);continue}
+    A.push([s.code,s.name,R.sumP(s.code),R.sumF(s.code)]);for(const k of kids)A.push([k.code,label(k.code,R),z(R.pv(k.code)),z(R.fv(k.code))])}
+  A.push(["","Cəmi xərclər",R.C74,R.D74],["","Büdcə vəsaiti qalığı:",R.C75,R.D75],[],[],["","İmza:",form.chair||"","M.Y"]);
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(A);
+  ws["!cols"]=[{wch:11},{wch:62},{wch:16},{wch:16}];
+  ws["!merges"]=[{s:{r:0,c:0},e:{r:0,c:1}},{s:{r:0,c:2},e:{r:0,c:3}},{s:{r:3,c:2},e:{r:3,c:3}},{s:{r:8,c:0},e:{r:8,c:1}},{s:{r:8,c:2},e:{r:8,c:3}}];
+  for(const k in ws){if(k[0]!=="!"&&typeof ws[k].v==="number"&&/^[CD]/.test(k)&&parseInt(k.slice(1))>5)ws[k].z="#,##0.00"}
+  XLSX.utils.book_append_sheet(wb,ws,"Cədvəl 2");
+  const rows=ops.filter(inPeriod).sort((a,b)=>a.date.localeCompare(b.date)).map((o,i)=>({"№":i+1,"Tarix":dmy(o.date),"Kod":o.code,"Maddə":NAME[o.code]||"","Təsvir":o.desc||"","Məbləğ (AZN)":num(o.amount),"Nəfər":o.people||"","Gün":o.days||"","Təşkilat":o.org||""}));
+  const ws2=XLSX.utils.json_to_sheet(rows.length?rows:[{"№":"","Tarix":"","Kod":"","Maddə":"","Təsvir":"","Məbləğ (AZN)":"","Nəfər":"","Gün":"","Təşkilat":""}]);
+  ws2["!cols"]=[{wch:5},{wch:11},{wch:7},{wch:60},{wch:34},{wch:13},{wch:7},{wch:6},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws2,"Əməliyyatlar");
+  const al=aid.filter(inPeriod).sort((a,b)=>a.date.localeCompare(b.date)||(a.name||"").localeCompare(b.name||"","az"));
+  const AA=[["Maddi yardım alanların siyahısı (2.4.1)"],[`Dövr: ${dmy(form.start)} – ${dmy(form.end)}`],[],["№","Tarix","Soyadı, adı, ata adı","Məbləğ (AZN)","Səbəb","İş yeri"],
+    ...al.map((x,i)=>[i+1,dmy(x.date),x.name,num(x.amount),x.reason||"",x.work||""]),[],["","","Cəmi: "+al.length+" nəfər",al.reduce((a,x)=>a+num(x.amount),0)]];
+  const ws3=XLSX.utils.aoa_to_sheet(AA);
+  for(let r=4;r<=4+al.length+1;r++){const m=XLSX.utils.encode_cell({r,c:3});if(ws3[m])ws3[m].z="#,##0.00"}
+  ws3["!cols"]=[{wch:5},{wch:11},{wch:36},{wch:13},{wch:26},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws3,"Maddi yardım");
+  {const B=bkCompute(),zz=v=>num(v)===0?"":num(v);
+   const BB=[["Təşkilatın adı:",form.org],["Dövr:",periodText()],[],["","Biznes kart üzrə hesabat"],["№","Maddələrin adı","Məbləğ (AZN)"],
+     [1,"Daxilolmalar"],["1.1","İlin əvvəlinə Biznes kart qalığı",B.open],...BK_IN.map(([c,n],i)=>["1."+(i+2),n,zz(B.sum[c])]),["","Cəmi daxilolmalar",B.tin],
+     [2,"Xərclər"],...BK_EX.map(([c],i)=>["2."+(i+1),bkLabel(c,B),zz(B.sum[c])]),["","Cəmi xərclər",B.tex],["","Büdcə vəsaiti qalığı:",B.bal],[],["","İmza:",form.chair||""]];
+   const wsb=XLSX.utils.aoa_to_sheet(BB);wsb["!cols"]=[{wch:8},{wch:70},{wch:16}];
+   for(const k in wsb){if(k[0]!=="!"&&typeof wsb[k].v==="number"&&k[0]==="C")wsb[k].z="#,##0.00"}
+   XLSX.utils.book_append_sheet(wb,wsb,"Biznes kart");
+   const br=B.P.slice().sort((a,b)=>a.date.localeCompare(b.date)).map((o,i)=>({"№":i+1,"Tarix":dmy(o.date),"Növ":bkIsIn(o.code)?"Daxilolma":"Xərc","Maddə":BK_NAME[o.code]||"","Təsvir":o.desc||"","Məbləğ (AZN)":num(o.amount),"Nəfər":o.people||"","Gün":o.days||""}));
+   const wsb2=XLSX.utils.json_to_sheet(br.length?br:[{"№":"","Tarix":"","Növ":"","Maddə":"","Təsvir":"","Məbləğ (AZN)":"","Nəfər":"","Gün":""}]);
+   wsb2["!cols"]=[{wch:5},{wch:11},{wch:10},{wch:60},{wch:34},{wch:13},{wch:7},{wch:6}];
+   XLSX.utils.book_append_sheet(wb,wsb2,"Biznes kart əməliyyatları")}
+  if(mem.length){const ml=mem.slice().sort((a,b)=>((Number(a.no)||1e9)-(Number(b.no)||1e9))||normName(a.name).localeCompare(normName(b.name),"az"));
+    const MM=[["Uçot kartı — həmkarlar ittifaqı üzvləri"],[`${form.org||""}`],[],["№","Struktur bölmə","Vəzifə","Soyadı, adı, ata adı","FİN","Təvəllüdü","Təhsili","Təyinat tarixi","Üzvlük","Xaric olma tarixi","Əmək Məcəlləsinin bəndi","Qeyd"],
+      ...ml.map((m,i)=>[i+1,m.unit||"",m.pos||"",normName(m.name),m.fin||"",dmy(m.birth),m.edu||"",dmy(m.hired),m.status||"Üzv",dmy(m.exitDate),m.exitBasis||"",m.note||""])];
+    const ws5=XLSX.utils.aoa_to_sheet(MM);for(let r=4;r<4+ml.length;r++){const a=XLSX.utils.encode_cell({r,c:4});if(ws5[a]){ws5[a].t="s";ws5[a].z="@"}}
+    ws5["!cols"]=[{wch:5},{wch:40},{wch:22},{wch:32},{wch:9},{wch:11},{wch:40},{wch:11},{wch:16},{wch:11},{wch:45},{wch:20}];
+    XLSX.utils.book_append_sheet(wb,ws5,"Uçot kartı")}
+  const buf=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  const fname=`HI_hesabati_${form.start}_${form.end}.xlsx`;
+  try{if(window.api){const r=await window.api.saveFile(fname,new Uint8Array(buf),"xlsx");if(r)toast("Excel faylı saxlanıldı");return}
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([buf]));a.download=fname;a.click();toast("Excel faylı yükləndi")}
+  catch(e){toast("Faylı saxlamaq alınmadı.")}
+}
+
+/* ---------- events ---------- */
+$("#tabs").addEventListener("click",e=>{const t=e.target.closest(".tab");if(!t)return;tab=t.dataset.tab;editId=null;confirmDel=null;gfPend=null;try{localStorage.setItem("hi2_tab",tab)}catch(x){}render();scrollTo({top:0})});
+$("#periods").addEventListener("click",async e=>{const p=e.target.closest(".pchip");if(!p)return;const prev={...form};form={...form,start:p.dataset.s,end:p.dataset.e};render();
+  try{await putForm()}catch(err){form=prev;render();toast(errText(err))}});
+$("#exportBtn").addEventListener("click",exportXlsx);
+if(window.api&&window.api.saveFile){const b=$("#backupBtn");b.hidden=false;b.addEventListener("click",manualBackup)}
+/* ---------- İnternetdən yeniləmə (1.0.8+): yeni versiya hazır olanda zolaq göstərilir ---------- */
+try{const a=document.querySelector(".author");if(a)a.textContent=`AzerSoft LLC · HİK-hesabat 1.0.8 · yeniləmə ${UI_VER}${window.api&&window.api.uiInfo&&window.api.uiInfo().fromUpdate?" (internetdən)":""}`}catch(e){}
+if(window.api&&window.api.onUiUpdated)window.api.onUiUpdated(v=>{let b=document.getElementById("updBar");if(!b){b=document.createElement("div");b.id="updBar";b.className="upd-bar";b.style.cssText="position:sticky;top:0;z-index:70;background:#B45309;color:#fff;padding:10px 14px;font-size:15px;font-weight:600;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.3)";document.body.prepend(b)}
+  b.innerHTML=`Proqramın yeni versiyası hazırdır (yeniləmə ${Number(v)||""}). Formada yazdıqlarınızı yadda saxlayın və <button class="btn" type="button" id="updGo" style="background:#fff;color:#B45309;border-color:#fff;font-weight:700;margin-left:6px">Yenilə</button>`;document.getElementById("updGo").onclick=()=>window.api.uiReload()});
+if(window.api&&window.api.uiInfo)setTimeout(()=>{try{const k="hi_ui_seen",o=localStorage.getItem(k);if(o!==String(UI_VER)){localStorage.setItem(k,String(UI_VER));if(o!==null)toast(`Proqram yeniləndi: yeniləmə ${UI_VER}`)}}catch(e){}},800);
+boot();
+</script>
+
+</body></html>
